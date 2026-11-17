@@ -221,3 +221,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+ # Audio and raw data (too large for GitHub)
+*.wav
+*.mp3
+*.flac
+*.zip
+*.tar.gz
+data/raw/
+data/audio/
