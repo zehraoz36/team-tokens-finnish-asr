@@ -1,0 +1,7 @@
+split,clips,hours,speakers
+train,3770,4.65,10.0
+dev_cv,1827,2.32,27.0
+dev_parl,1774,5.16,19.0
+test_cv,1833,2.61,187.0
+test_parl,1913,5.55,21.0
+test_fleurs,916,3.29,
