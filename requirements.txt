@@ -1,0 +1,8 @@
+datasets>=3
+soundfile
+pandas
+huggingface_hub
+jiwer
+transformers
+torch
+librosa
