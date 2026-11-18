@@ -1,7 +1,8 @@
 # Team Tokens — Finnish ASR
 
 COE025 Natural Language Processing · Project 3.
-Automatic speech recognition (ASR) for Finnish: zero-shot baselines vs. a fine-tuned model.
+Automatic speech recognition (ASR) for Finnish: zero-shot baselines vs. a fine-tuned model,
+evaluated across domains.
 
 ## Team
 
@@ -11,6 +12,16 @@ Ece Mina Örenler, Tuana Harmankaya, Begüm Ziyade, Yunus Emre Demirel, Zehra Ö
 
 Finnish (`fi`). Not English and not a mother tongue of any group member. Finnish is
 agglutinative and morphologically rich, which makes it a demanding ASR target.
+
+## Scope
+
+We fine-tune only on Finnish read speech (Common Voice) and evaluate on three test sets that span
+different domains: Common Voice (in-domain read speech), Aalto Parliament (out-of-domain
+spontaneous/formal speech), and FLEURS (out-of-domain read speech). The large Aalto Parliament
+training corpus (~3,100 h) is deliberately **not** used for training. This makes the study a
+**cross-domain ASR robustness evaluation** — how a model trained on one domain generalizes to
+others — rather than a single-domain adaptation. The small training set (4.65 h) is a known
+limitation and is part of what this cross-domain setup tests.
 
 ## Data
 
@@ -111,11 +122,14 @@ Fine-tuned model: https://huggingface.co/tia88na/whisper-small-fi-tokens
 
 ### Discussion
 
+These results are read as a cross-domain robustness check: the model trained on Common Voice is
+strongest in-domain and degrades on the out-of-domain sets.
+
 - **test_cv (in-domain):** largest gain (WER −7.0, CER −2.1); the training data is Common Voice.
-- **test_parl:** small WER change (−1.0) but clear CER drop (−2.5); harder, different domain.
-- **test_fleurs (out-of-domain):** fine-tuning regresses (WER +2.5). Specializing on the training
-  domains (Common Voice + Parliament) reduces generalization — which is why we never average across
-  test sets.
+- **test_parl (out-of-domain, spontaneous):** small WER change (−1.0) but clear CER drop (−2.5);
+  harder, different domain.
+- **test_fleurs (out-of-domain, read):** fine-tuning regresses (WER +2.5). Specializing on the
+  training domain reduces generalization — which is why we never average across test sets.
 - **WER high, CER low** throughout, as expected for an agglutinative language.
 
 ## Repository structure
