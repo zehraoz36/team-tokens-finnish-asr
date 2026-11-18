@@ -15,7 +15,6 @@ agglutinative and morphologically rich, which makes it a demanding ASR target.
 ## Data
 
 Prepared audio (16 kHz mono WAV) is published as one Hugging Face dataset:
-https://huggingface.co/datasets/zehraoz36/team-tokens-finnish-asr-data
 
 ```python
 from datasets import load_dataset
@@ -33,7 +32,6 @@ ds = load_dataset("zehraoz36/team-tokens-finnish-asr-data")
 
 Total: 23.6 h (train 4.65 h, dev 7.48 h, test 11.45 h). Clip lists without audio: `data/*.csv`
 (each row has `text` = cleaned/normalized and `raw_text` = original transcript).
-Audio is not stored on GitHub because of its size (~3.5 GB).
 
 ### Sources and licenses
 
@@ -49,6 +47,25 @@ Splits are built **by speaker**, not by clip: all clips of a speaker stay in one
 We verified **0 shared speakers** between train and every dev/test set, so no speaker leaks
 from training into testing. FLEURS provides no speaker IDs. Preparation and the split logic:
 `scripts/prepare_data.ipynb`.
+
+## Hugging Face resources
+
+Large files are hosted on Hugging Face, not GitHub, because GitHub rejects files over 100 MB.
+This repository holds the code, clip lists, results and predictions; the audio and the trained
+model live on Hugging Face and load with one line.
+
+- **Dataset (prepared audio + transcripts):**
+  https://huggingface.co/datasets/zehraoz36/team-tokens-finnish-asr-data
+  The ~3.5 GB cleaned 16 kHz audio with trusted references, used by every experiment.
+- **Fine-tuned model:**
+  https://huggingface.co/tia88na/whisper-small-fi-tokens
+  Our fine-tuned `openai/whisper-small` (~1 GB). Load it and transcribe Finnish without retraining:
+
+  ```python
+  from transformers import WhisperForConditionalGeneration, WhisperProcessor
+  model = WhisperForConditionalGeneration.from_pretrained("tia88na/whisper-small-fi-tokens")
+  processor = WhisperProcessor.from_pretrained("tia88na/whisper-small-fi-tokens")
+  ```
 
 ## Evaluation
 
@@ -90,6 +107,7 @@ Same test clips, same `normalize()`, same scoring.
 
 Full table: `results/results.csv`. Per-clip predictions vs references: `results/predictions/`.
 Training and evaluation: `scripts/finnish_asr_whisper_finetune.ipynb`.
+Fine-tuned model: https://huggingface.co/tia88na/whisper-small-fi-tokens
 
 ### Discussion
 
