@@ -31,7 +31,8 @@ ds = load_dataset("zehraoz36/team-tokens-finnish-asr-data")
 | test_parl | Aalto Finnish Parliament eval | 1913 | 5.55 | 21 |
 | test_fleurs | FLEURS fi_fi test | 916 | 3.29 | – |
 
-Total: 23.6 h (train 4.65 h, dev 7.48 h, test 11.45 h). Clip lists without audio: `data/*.csv`.
+Total: 23.6 h (train 4.65 h, dev 7.48 h, test 11.45 h). Clip lists without audio: `data/*.csv`
+(each row has `text` = cleaned/normalized and `raw_text` = original transcript).
 Audio is not stored on GitHub because of its size (~3.5 GB).
 
 ### Sources and licenses
@@ -87,7 +88,8 @@ Same test clips, same `normalize()`, same scoring.
 | test_parl | 25.68 | 8.40 | 24.72 | 5.89 |
 | test_fleurs | 26.41 | 5.26 | 28.87 | 5.97 |
 
-Full table: `results/results.csv`. Training and evaluation: `scripts/finetune_whisper.ipynb`.
+Full table: `results/results.csv`. Per-clip predictions vs references: `results/predictions/`.
+Training and evaluation: `scripts/finnish_asr_whisper_finetune.ipynb`.
 
 ### Discussion
 
@@ -100,13 +102,13 @@ Full table: `results/results.csv`. Training and evaluation: `scripts/finetune_wh
 
 ## Repository structure
 
-- `data/` — clip lists (CSV), one per split, plus `summary.csv`
-- `scripts/` — `prepare_data.ipynb` (data), `finetune_whisper.ipynb` (baseline + fine-tune + eval)
-- `results/` — WER/CER tables (`results.csv`)
+- `data/` — clip lists (CSV), one per split, plus `summary.csv` (`text` = cleaned, `raw_text` = original)
+- `scripts/` — `prepare_data.ipynb` (data), `finnish_asr_whisper_finetune.ipynb` (baseline + fine-tune + eval)
+- `results/` — WER/CER tables (`results.csv`) and per-clip predictions (`predictions/`)
 - `contributions/` — per-member contribution notes
 
 ## Reproduce
 
 1. `load_dataset("zehraoz36/team-tokens-finnish-asr-data")`
-2. Open `scripts/finetune_whisper.ipynb` in Colab (T4 GPU), run top to bottom.
+2. Open `scripts/finnish_asr_whisper_finetune.ipynb` in Colab (T4 GPU), run top to bottom.
 3. Baseline, fine-tuning and the comparison table are produced in order; `results/results.csv` is the output.
