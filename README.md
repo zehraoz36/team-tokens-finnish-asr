@@ -123,7 +123,9 @@ Same test clips, same `normalize()`, same scoring.
 | test_fleurs | 26.41 | 5.26 | 28.87 | 5.97 |
 
 These are the first-run numbers, kept unchanged in `results/legacy/results.csv` (predictions: `results/legacy/predictions/`).
-They are being re-scored with the shared evaluation code (`scripts/eval_whisper.ipynb`); new scores go to `results/scores/`.
+All systems are now scored with the shared evaluation code; the current numbers (Whisper re-scored, Qwen3-ASR 1.7B)
+are in `results/scores/` and per-clip predictions in `results/predictions/`. With the shared code, FLEURS changes slightly
+(baseline 26.41 → 26.37, fine-tuned 28.87 → 28.85) because the first run normalized some references twice.
 Training and evaluation: `scripts/finnish_asr_whisper_finetune.ipynb`.
 Fine-tuned model: https://huggingface.co/tia88na/whisper-small-fi-tokens
 
