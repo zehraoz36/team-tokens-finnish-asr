@@ -84,6 +84,12 @@ WER and CER (`jiwer`). Every system is scored on the **same** test clips with th
 text normalization (`normalize()` in `scripts/prepare_data.ipynb`, also applied to every model's
 predictions before scoring). The three test sets are reported **separately**.
 
+All systems use one shared evaluation module, `scripts/asr_eval.py`: references are the dataset's
+`text` column, `normalize()` is applied once to each raw model output, WER/CER are corpus-level
+(total edits / total reference words or characters), and RTF = compute time / audio time. It writes
+`results/scores/<system>.csv` and per-clip predictions `results/predictions/<system>__<test_set>.csv`
+(raw and normalized hypothesis).
+
 We report both WER and CER because Finnish is agglutinative: a single wrong suffix turns a whole
 word into an error and inflates WER, while CER stays low. Metric choice follows the Hugging Face
 Audio Course, Chapter 5, "Evaluation":
@@ -116,7 +122,8 @@ Same test clips, same `normalize()`, same scoring.
 | test_parl | 25.68 | 8.40 | 24.72 | 5.89 |
 | test_fleurs | 26.41 | 5.26 | 28.87 | 5.97 |
 
-Full table: `results/results.csv`. Per-clip predictions vs references: `results/predictions/`.
+These are the first-run numbers, kept unchanged in `results/legacy/results.csv` (predictions: `results/legacy/predictions/`).
+They are being re-scored with the shared evaluation code (`scripts/eval_whisper.ipynb`); new scores go to `results/scores/`.
 Training and evaluation: `scripts/finnish_asr_whisper_finetune.ipynb`.
 Fine-tuned model: https://huggingface.co/tia88na/whisper-small-fi-tokens
 
@@ -135,12 +142,13 @@ strongest in-domain and degrades on the out-of-domain sets.
 ## Repository structure
 
 - `data/` — clip lists (CSV), one per split, plus `summary.csv` (`text` = cleaned, `raw_text` = original)
-- `scripts/` — `prepare_data.ipynb` (data), `finnish_asr_whisper_finetune.ipynb` (baseline + fine-tune + eval)
-- `results/` — WER/CER tables (`results.csv`) and per-clip predictions (`predictions/`)
+- `scripts/` — `prepare_data.ipynb` (data), `finnish_asr_whisper_finetune.ipynb` (fine-tuning), `asr_eval.py` (shared evaluation), `eval_*.ipynb` (one notebook per evaluated model family)
+- `results/` — `scores/` (one WER/CER/RTF file per system), `predictions/` (per-clip predictions), `legacy/` (first-run results)
 - `contributions/` — per-member contribution notes
 
 ## Reproduce
 
 1. `load_dataset("zehraoz36/team-tokens-finnish-asr-data")`
 2. Open `scripts/finnish_asr_whisper_finetune.ipynb` in Colab (T4 GPU), run top to bottom.
-3. Baseline, fine-tuning and the comparison table are produced in order; `results/results.csv` is the output.
+3. Baseline, fine-tuning and the comparison table are produced in order (first-run output: `results/legacy/results.csv`).
+4. Every system is then scored with `scripts/asr_eval.py`: `scripts/eval_whisper.ipynb` (Whisper baseline + fine-tuned), `scripts/eval_qwen3_asr.ipynb` (Qwen3-ASR).
