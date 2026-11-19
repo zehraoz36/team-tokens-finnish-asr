@@ -126,6 +126,9 @@ These are the first-run numbers, kept unchanged in `results/legacy/results.csv` 
 All systems are now scored with the shared evaluation code; the current numbers (Whisper re-scored, Qwen3-ASR 1.7B)
 are in `results/scores/` and per-clip predictions in `results/predictions/`. With the shared code, FLEURS changes slightly
 (baseline 26.41 → 26.37, fine-tuned 28.87 → 28.85) because the first run normalized some references twice.
+Generated summaries: `results/results_table.md` (all systems, `scripts/make_results_table.py`),
+`results/bootstrap_ci.md` (95% confidence intervals, `scripts/bootstrap_ci.py`) and
+`results/data_checks.md` (speakers, hours, test sentences found in train, `scripts/data_checks.py`).
 Training and evaluation: `scripts/finnish_asr_whisper_finetune.ipynb`.
 Fine-tuned model: https://huggingface.co/tia88na/whisper-small-fi-tokens
 
