@@ -229,6 +229,15 @@ def run_split(transcribe_fn: Callable[[List], List[str]], dset, batch_size: int 
     return ids, refs, raw, compute, audio_sec
 
 
+def _done_splits(system: str, scores_dir: str = SCORES_DIR) -> set:
+    path = f"{scores_dir}/{_slug(system)}.csv"
+    if not os.path.exists(path):
+        return set()
+    with open(path, newline="", encoding="utf-8") as f:
+        return {r["test_set"] for r in csv.DictReader(f)
+                if os.path.exists(f"{PRED_DIR}/{_slug(system)}__{r['test_set']}.csv")}
+
+
 def evaluate_system(system: str, checkpoint: str, transcribe_fn, test_sets: Dict,
                     role: str = "baseline", settings: str = "", precision: str = "",
                     batch_size: int = 16, revision: Optional[str] = None,
@@ -239,10 +248,16 @@ def evaluate_system(system: str, checkpoint: str, transcribe_fn, test_sets: Dict
     """
     if role not in ("baseline", "contribution"):
         raise ValueError("role must be 'baseline' or 'contribution'")
+    done = _done_splits(system, scores_dir)
+    todo = {k: v for k, v in test_sets.items() if k not in done}
+    if done:
+        print(f"[{system}] already scored, skipped: {sorted(done)} (delete {scores_dir}/{_slug(system)}.csv to redo)")
+    if not todo:
+        return []
     revision = revision or model_revision(checkpoint)
     hw = hardware()
     rows = []
-    for split, dset in test_sets.items():
+    for split, dset in todo.items():
         ids, refs, raw, compute, audio_sec = run_split(transcribe_fn, dset, batch_size, desc=f"{system} {split}")
         hyps = [normalize(h) for h in raw]
         save_predictions(f"{pred_dir}/{_slug(system)}__{split}.csv", ids, refs, raw, hyps)
