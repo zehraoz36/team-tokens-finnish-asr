@@ -1,6 +1,6 @@
 # Error analysis of saved Finnish ASR predictions
 
-The aggregate counts cover every saved prediction from all seven systems. The examples are purposefully selected after viewing outputs to illustrate observable error types; they are not a random sample and do not estimate the prevalence of grammatical or semantic errors. Reference text is preserved from the fixed manifests. No new reference transcripts or audio-based judgments are introduced.
+The aggregate counts cover every saved prediction from all eight systems. The examples are purposefully selected after viewing outputs to illustrate observable error types; they are not a random sample and do not estimate the prevalence of grammatical or semantic errors. Reference text is preserved from the fixed manifests. No new reference transcripts or audio-based judgments are introduced.
 
 ## Aggregate observations
 
@@ -8,6 +8,9 @@ S/N, D/N and I/N are percentages of total reference words. Their sum is corpus W
 
 | System | Test | S/N % | D/N % | I/N % | Empty hypotheses | Exact matches | Boundary-only clips |
 |---|---|---:|---:|---:|---:|---:|---:|
+| Mateli RNN-T baseline | test_cv | 11.55 | 1.97 | 1.50 | 5 | 989 | 89 |
+| Mateli RNN-T baseline | test_fleurs | 12.87 | 2.16 | 2.19 | 0 | 217 | 48 |
+| Mateli RNN-T baseline | test_parl | 8.35 | 2.92 | 1.34 | 1 | 476 | 55 |
 | canary-1b-v2 baseline | test_cv | 8.82 | 0.66 | 0.89 | 0 | 1148 | 44 |
 | canary-1b-v2 baseline | test_fleurs | 7.08 | 0.74 | 1.06 | 0 | 351 | 44 |
 | canary-1b-v2 baseline | test_parl | 5.89 | 3.28 | 0.98 | 1 | 653 | 59 |
@@ -105,6 +108,15 @@ Test: `test_fleurs`; recording: `fleurs_00016`.
 - Hypothesis: `sen maineyellisyyden keskipisteenä alkoi noin vuonna 400 jälkeen kristuksen ja jatkuin noin vuoteen tuhat sata aste`
 
 1100 is rendered as tuhat sata. Digit-versus-word formatting can contribute to the score; other word and boundary errors are also present. No semantic number-equivalence normalization is applied.
+
+### Name and spelling — Mateli RNN-T baseline
+
+Test: `test_fleurs`; recording: `fleurs_00000`.
+
+- Reference: `yhdysvaltojen ilmailuviranomainen väittää että nextgen on järjestelmä jonka ansiosta lentokoneet voivat lentää lyhyempiä reittejä säästää vuosittain miljoonia gallonia polttoainetta ja vähentää hiilidioksidipäästöjä`
+- Hypothesis: `yhdysvaltojen ilmailuviranomainen väittää että nekst jen on järjestelmä jonka ansiosta lentokoneet voivat lentää lyhyempiä reittejä säästää vuosittain miljoonia kallonia polttoainetta ja vähentää hiilidioksidipäästöjä`
+
+NextGen is rendered phonetically as nekst jen; gallonia becomes kallonia. These are observable spelling and token-boundary differences, not verified semantic errors.
 
 ## Implications and limits
 

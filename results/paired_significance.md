@@ -19,7 +19,7 @@ Exploratory analysis of saved predictions. The existing test scores were known b
 - Use 99,999 Monte Carlo sign assignments per hypothesis, seed 20261121 plus hypothesis index. The p-value is (extreme assignments + 1) / (assignments + 1), so it is never reported as zero. The script enumerates all assignments instead when the requested budget permits an exact test.
 - Holm controls the family-wise error rate across these six tests, not every pair in the bootstrap table. The reproduced 95% bootstrap intervals are pointwise, unadjusted intervals from the existing analysis; they are not simultaneous Holm intervals and their stars are not adjusted p-values.
 - These intervals and tests measure test-sample uncertainty conditional on the fitted models. They do not account for training-seed variability, unknown pretraining overlap, or label errors.
-- All seven systems' saved predictions are checked for complete unique IDs, matching references, one-pass hypothesis normalization, and agreement with committed WER/CER and word edit counts before analysis.
+- All eight systems' saved predictions are checked for complete unique IDs, matching references, one-pass hypothesis normalization, and agreement with committed WER/CER and word edit counts before analysis.
 
 ## Interpretation
 

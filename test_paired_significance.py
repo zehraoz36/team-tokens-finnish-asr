@@ -1,7 +1,11 @@
 import itertools
 import unittest
+from pathlib import Path
+import sys
 
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / 'scripts'))
 
 from analysis_common import align_predictions, counts
 from paired_significance import aggregate_clusters, holm, paired_randomization

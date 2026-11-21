@@ -1,5 +1,5 @@
 {
-  "base_commit": "916b6de3b6fea7240ba5f6d71d06d9d275025872",
+  "base_commit": "31e8729f97a24a245f41ee6ca2736543eefbe1a0",
   "python": "3.11.9",
   "numpy": "2.4.6",
   "jiwer": "4.0.0",
@@ -7,18 +7,21 @@
   "permutations": 99999,
   "family_size": 6,
   "exploratory": true,
-  "validated_system_test_pairs": 21,
+  "validated_system_test_pairs": 24,
   "input_sha256": {
     "data/test_cv.csv": "3955beea51a64f5099dd01ef1893403eb71e82eba2ec6c19872c63cdfc9fd55c",
     "data/test_fleurs.csv": "b4f49540bb47e3628d87dcf1fc7665ec398263d92d43314cbff73932fddb9ed1",
     "data/test_parl.csv": "350ec17d45f1da00d8291c2e628f6a23620bb9e54a76efb126741ff03f6870bc",
-    "results/bootstrap_ci.csv": "0e535fa773bf8567b3e7f6b91275c3f2fb7c4cb023f8792f99ef26b41512bc12",
+    "results/bootstrap_ci.csv": "225607d57d7398fc15a3a46c24fc49fd30af83a26a01f39ca1e7f4ed375cd7c0",
     "results/predictions/canary-1b-v2-baseline__test_cv.csv": "afb58acd29c3ad42a2fe7ac15b96b2eaa239a4fe569459a4f5e66f2fb3ce89f3",
     "results/predictions/canary-1b-v2-baseline__test_fleurs.csv": "3c1824986c7292254669cc26af4f324346837f45367504fec9aabd6a1ebdc708",
     "results/predictions/canary-1b-v2-baseline__test_parl.csv": "0e10b6838716002d6956315a144bc8d19c9348c9e834b071583c97561f0e18e0",
     "results/predictions/gmm-hmm-monophone-trained-by-us__test_cv.csv": "1718f2ca7de2d4e56e2a99d2605973f8d7a57295c7493b4706c92470b43ec2f4",
     "results/predictions/gmm-hmm-monophone-trained-by-us__test_fleurs.csv": "3ce6d0d7fb5bf659a74db844d955083bfb363430376e5be3de1bc924de0c625c",
     "results/predictions/gmm-hmm-monophone-trained-by-us__test_parl.csv": "228c31702385351a9cc3fe4eaa7fac9e4caec9b336aa9bb3c3b565866ae37439",
+    "results/predictions/mateli-rnn-t-baseline__test_cv.csv": "8682dbc57359d9dbb14588fb3c61d11de149070223d0e5f0179538166a2ea65f",
+    "results/predictions/mateli-rnn-t-baseline__test_fleurs.csv": "dfc6215e29b8b5e7705c4416f111f748f87d320ea9c942f5cd6564fecbb4cdef",
+    "results/predictions/mateli-rnn-t-baseline__test_parl.csv": "8f00963cb426e8accbe5f3f7b211fe9b151eb223c8f683e8008a31634c6345c1",
     "results/predictions/parakeet-tdt-0-6b-v3-baseline__test_cv.csv": "a0f51a4f404033f5aaf1125885b42fc97737da30c59edeac7d9a42a216ae736f",
     "results/predictions/parakeet-tdt-0-6b-v3-baseline__test_fleurs.csv": "8a80e667afda8c9fe5ddc3da21698614a241eb3cd6694865edc682946d53b6c4",
     "results/predictions/parakeet-tdt-0-6b-v3-baseline__test_parl.csv": "c28583f39ede3de26ebd2d316a118f8488e2f8f8a6eb002ef7e3c18b2cbbab3b",
@@ -36,14 +39,15 @@
     "results/predictions/whisper-small-zero-shot__test_parl.csv": "39a66b88ffb6c25d4061f5494846d8c8003bf077ed20721e4a0cc971427dad83",
     "results/scores/canary-1b-v2-baseline.csv": "6def524954f40eff98f66cefe63b3ed2377664cfa85be99289352d6bda5b0806",
     "results/scores/gmm-hmm-monophone-trained-by-us.csv": "c9a2a01da8a80f62b20f272791d3250d0722f00e88add1d6bd7b5999675a3ee7",
+    "results/scores/mateli-rnn-t-baseline.csv": "528850bce659955d3e92e28c0956524abe0d1428fadc0e81bd3ec9e7336c5f29",
     "results/scores/parakeet-tdt-0-6b-v3-baseline.csv": "d0609aaa684d1d9819e2db2c25354b3ce22bd4d247e5cf4b7c39fcdef9403cd4",
     "results/scores/qwen3-asr-1-7b-zero-shot.csv": "9a70d0c6fbaeb32ebcad81973d6487051584bf8744b280bd2e98773a0da2f4ab",
     "results/scores/wav2vec2-xlsr-53-finnish-ctc-baseline.csv": "f7509a5d801b4cd4686937303c5229efaf0089bf71bc01ab900151b949c0d14a",
     "results/scores/whisper-small-fine-tuned-ours.csv": "0406866cd62c4bd9734f4f090b693be5fe3e5d36f4f7badb45bb96af0ed6975c",
     "results/scores/whisper-small-zero-shot.csv": "f038c67a0ff9e8e79e754ded04a057f073247961d731edaf2c723e2a1d46da13",
-    "scripts/analysis_common.py": "cc4bcccfcf020663d30827c6887be99401126b721ba3108ef9837ca40086d3b9",
+    "scripts/analysis_common.py": "9be701b12235d6ada87997696d9515ece38fcf6b885c14bf99091bccf78a0968",
     "scripts/asr_eval.py": "e052e8a0e07d9b03a9ebb8b94258a1b085124f056c976419265c4ad423091b6a",
     "scripts/bootstrap_ci.py": "0ba1ea34382b10a8d86a994105e5838340ae2af1be6ba6d5547792338b3fa200",
-    "scripts/paired_significance.py": "e9c2f56cba2fdaf98708961bd98a43cf260597cf1612d8f1e1ca89ece06c43b8"
+    "scripts/paired_significance.py": "1ff80019a5b5eaae1a1c75e53d5830b4b8e887c7f0194a61c09860b95ee42a1d"
   }
 }

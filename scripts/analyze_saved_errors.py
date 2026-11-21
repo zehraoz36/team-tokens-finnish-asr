@@ -21,6 +21,8 @@ EXAMPLES = [
      "euroopan becomes euroopa and maatalousunioni is split into maatalous unioni."),
     ("whisper-small fine-tuned (ours)", "test_fleurs", "fleurs_00016", "Number representation and spelling",
      "1100 is rendered as tuhat sata. Digit-versus-word formatting can contribute to the score; other word and boundary errors are also present. No semantic number-equivalence normalization is applied."),
+    ("Mateli RNN-T baseline", "test_fleurs", "fleurs_00000", "Name and spelling",
+     "NextGen is rendered phonetically as nekst jen; gallonia becomes kallonia. These are observable spelling and token-boundary differences, not verified semantic errors."),
 ]
 
 
@@ -40,14 +42,16 @@ def main():
             digit_sequence_mismatch_clips=sum(re.findall(r"\d+", r["reference"]) !=
                 re.findall(r"\d+", r["hypothesis"]) for r in p)))
     write_csv(ROOT / "results/error_summary.csv", summaries)
+    write_csv(ROOT / "error_summary.csv", summaries)
     selected = []
     for system, split, cid, category, note in EXAMPLES:
         p = next(r for r in data[system, split]["predictions"] if r["id"] == cid)
         selected.append(dict(system=system, test_set=split, id=cid, category=category,
             reference=p["reference"], hypothesis=p["hypothesis"], raw_hypothesis=p["raw_hypothesis"], observation=note))
     write_csv(ROOT / "results/error_examples.csv", selected)
+    write_csv(ROOT / "error_examples.csv", selected)
     lines = ["# Error analysis of saved Finnish ASR predictions", "",
-        "The aggregate counts cover every saved prediction from all seven systems. The examples are "
+        "The aggregate counts cover every saved prediction from all eight systems. The examples are "
         "purposefully selected after viewing outputs to illustrate observable error types; they are not a random "
         "sample and do not estimate the prevalence of grammatical or semantic errors. Reference text is preserved "
         "from the fixed manifests. No new reference transcripts or audio-based judgments are introduced.", "",
@@ -86,6 +90,7 @@ def main():
         selection="purposeful illustrative examples; post hoc; no prevalence inference",
         systems=len({s for s,t in data}), predictions=sum(len(v["predictions"]) for v in data.values()),
         input_sha256=hashes(files+[ROOT/"scripts/analyze_saved_errors.py",ROOT/"scripts/analysis_common.py"])),indent=2)+"\n",encoding="utf-8")
+    (ROOT / "error_analysis_metadata.json").write_text((ROOT / "results/error_analysis_metadata.json").read_text(encoding="utf-8"), encoding="utf-8")
     print(f"Validated {len(data)} system/test combinations; wrote {len(selected)} examples and {len(summaries)} aggregate rows.")
 
 
