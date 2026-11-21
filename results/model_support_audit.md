@@ -13,7 +13,7 @@ Checked on 2026-11-21. Published model cards describe language support; the proj
 | Parakeet TDT | `nvidia/parakeet-tdt-0.6b-v3` | [Finnish support and TDT architecture](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) |
 | Qwen3-ASR, either listed size | `Qwen/Qwen3-ASR-1.7B` | [Model card](https://huggingface.co/Qwen/Qwen3-ASR-1.7B) |
 
-All six baselines have saved predictions on the three project test sets. The group's Whisper fine-tune is reported separately. The CTC and attention-family entries reuse the relevant completed systems; they do not imply additional experiments or inflate the number of systems.
+All seven evaluated baselines, including Mateli RNN-T below, have saved predictions on the three project test sets. The group's Whisper fine-tune is reported separately. The CTC and attention-family entries reuse the relevant completed systems; they do not imply additional experiments or inflate the number of systems.
 
 ## HuBERT with a Finnish ASR head
 
