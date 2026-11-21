@@ -1,0 +1,21 @@
+{
+  "system": "Mateli RNN-T baseline",
+  "role": "baseline (published checkpoint; no team fine-tuning)",
+  "model_id": "samuli/mateli",
+  "model_revision": "3dd0f094234d565dc923391eee15c4425feafdea",
+  "dataset_id": "zehraoz36/team-tokens-finnish-asr-data",
+  "dataset_revision": "2dad7a2dd2b4e688e673b4b9c2526f8aac750ec7",
+  "test_splits": [
+    "test_cv",
+    "test_parl",
+    "test_fleurs"
+  ],
+  "sampling_rate_hz": 16000,
+  "decoding": "RNN-T greedy decoding",
+  "normalization_and_scoring": "scripts/asr_eval.py from the cloned project repository",
+  "hardware": "Tesla T4 (torch 2.14.1+cu130)",
+  "torch_version": "2.14.1+cu130",
+  "created_utc": "2026-11-21T19:45:50.817813+00:00",
+  "model_card": "https://huggingface.co/samuli/mateli",
+  "license": "CC BY-NC 4.0"
+}
