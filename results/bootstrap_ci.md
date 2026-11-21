@@ -7,13 +7,25 @@ WER/CER in %. *Cluster* resamples whole speakers (test_cv, test_parl) or whole s
 
 | Test set | System | WER | 95% CI (cluster) | 95% CI (clip) | CER | 95% CI (cluster) | 95% CI (clip) |
 |---|---|---:|---|---|---:|---|---|
+| test_cv | canary-1b-v2 baseline | 10.36 | [9.36, 11.39] | [9.60, 11.14] | 2.00 | [1.75, 2.26] | [1.83, 2.17] |
+| test_cv | gmm-hmm monophone (trained by us) | 80.69 | [79.18, 82.27] | [79.67, 81.64] | 42.58 | [41.14, 44.07] | [41.76, 43.39] |
+| test_cv | parakeet-tdt-0.6b-v3 baseline | 7.17 | [6.25, 8.24] | [6.53, 7.82] | 1.37 | [1.14, 1.65] | [1.22, 1.52] |
 | test_cv | qwen3-asr-1.7b zero-shot | 31.13 | [29.33, 33.13] | [30.01, 32.31] | 7.23 | [6.57, 7.96] | [6.87, 7.59] |
+| test_cv | wav2vec2-xlsr-53-finnish CTC baseline | 42.78 | [40.24, 45.62] | [41.46, 44.05] | 8.93 | [8.11, 9.93] | [8.56, 9.31] |
 | test_cv | whisper-small fine-tuned (ours) | 23.93 | [22.43, 25.53] | [22.90, 24.91] | 4.61 | [4.19, 5.07] | [4.36, 4.84] |
 | test_cv | whisper-small zero-shot | 30.94 | [28.81, 33.41] | [29.36, 32.85] | 6.71 | [5.92, 7.71] | [6.14, 7.54] |
+| test_parl | canary-1b-v2 baseline | 10.14 | [8.49, 11.85] | [9.70, 10.63] | 3.65 | [2.91, 4.48] | [3.41, 3.89] |
+| test_parl | gmm-hmm monophone (trained by us) | 87.20 | [85.56, 88.80] | [86.72, 87.69] | 47.86 | [45.16, 50.35] | [47.36, 48.33] |
+| test_parl | parakeet-tdt-0.6b-v3 baseline | 13.28 | [11.40, 15.18] | [12.74, 13.82] | 4.09 | [3.32, 4.90] | [3.84, 4.31] |
 | test_parl | qwen3-asr-1.7b zero-shot | 26.50 | [23.87, 28.98] | [25.79, 27.24] | 6.94 | [5.89, 8.00] | [6.67, 7.20] |
+| test_parl | wav2vec2-xlsr-53-finnish CTC baseline | 56.22 | [51.71, 60.28] | [55.31, 57.14] | 13.07 | [11.33, 14.77] | [12.74, 13.41] |
 | test_parl | whisper-small fine-tuned (ours) | 24.72 | [22.09, 27.23] | [24.01, 25.44] | 5.89 | [4.86, 6.90] | [5.54, 6.30] |
 | test_parl | whisper-small zero-shot | 25.68 | [22.75, 28.60] | [24.31, 27.35] | 8.40 | [6.97, 9.87] | [7.65, 9.28] |
+| test_fleurs | canary-1b-v2 baseline | 8.88 | [7.97, 9.88] | [8.26, 9.53] | 2.10 | [1.79, 2.47] | [1.90, 2.34] |
+| test_fleurs | gmm-hmm monophone (trained by us) | 93.11 | [92.34, 93.92] | [92.53, 93.67] | 53.07 | [52.18, 53.97] | [52.48, 53.71] |
+| test_fleurs | parakeet-tdt-0.6b-v3 baseline | 13.35 | [12.19, 14.57] | [12.56, 14.18] | 2.72 | [2.38, 3.08] | [2.50, 2.98] |
 | test_fleurs | qwen3-asr-1.7b zero-shot | 25.16 | [23.83, 26.47] | [24.22, 26.15] | 5.81 | [5.39, 6.24] | [5.51, 6.16] |
+| test_fleurs | wav2vec2-xlsr-53-finnish CTC baseline | 59.52 | [57.55, 61.56] | [58.04, 61.08] | 15.83 | [14.72, 17.03] | [15.10, 16.61] |
 | test_fleurs | whisper-small fine-tuned (ours) | 28.85 | [27.36, 30.30] | [27.73, 30.02] | 5.97 | [5.48, 6.46] | [5.62, 6.36] |
 | test_fleurs | whisper-small zero-shot | 26.37 | [24.95, 27.76] | [25.32, 27.49] | 5.26 | [4.85, 5.67] | [4.97, 5.58] |
 
@@ -21,14 +33,68 @@ WER/CER in %. *Cluster* resamples whole speakers (test_cv, test_parl) or whole s
 
 | Test set | A − B | WER | 95% CI (cluster) | 95% CI (clip) | CER | 95% CI (cluster) | 95% CI (clip) |
 |---|---|---:|---|---|---:|---|---|
+| test_cv | canary-1b-v2 baseline − gmm-hmm monophone (trained by us) | -70.32 | [-71.81, -68.86] * | [-71.40, -69.24] * | -40.58 | [-41.97, -39.25] * | [-41.37, -39.80] * |
+| test_cv | canary-1b-v2 baseline − parakeet-tdt-0.6b-v3 baseline | 3.19 | [2.50, 3.86] * | [2.52, 3.83] * | 0.63 | [0.45, 0.79] * | [0.47, 0.78] * |
+| test_cv | canary-1b-v2 baseline − qwen3-asr-1.7b zero-shot | -20.76 | [-22.09, -19.49] * | [-21.84, -19.74] * | -5.23 | [-5.77, -4.75] * | [-5.56, -4.89] * |
+| test_cv | canary-1b-v2 baseline − wav2vec2-xlsr-53-finnish CTC baseline | -32.42 | [-34.73, -30.28] * | [-33.75, -31.04] * | -6.93 | [-7.76, -6.25] * | [-7.30, -6.58] * |
+| test_cv | canary-1b-v2 baseline − whisper-small zero-shot | -20.58 | [-22.57, -18.98] * | [-22.53, -19.06] * | -4.71 | [-5.60, -4.07] * | [-5.54, -4.19] * |
+| test_cv | gmm-hmm monophone (trained by us) − parakeet-tdt-0.6b-v3 baseline | 73.51 | [72.13, 74.93] * | [72.50, 74.57] * | 41.21 | [39.85, 42.66] * | [40.41, 42.02] * |
+| test_cv | gmm-hmm monophone (trained by us) − qwen3-asr-1.7b zero-shot | 49.56 | [47.71, 51.46] * | [48.17, 50.90] * | 35.35 | [34.10, 36.66] * | [34.58, 36.13] * |
+| test_cv | gmm-hmm monophone (trained by us) − wav2vec2-xlsr-53-finnish CTC baseline | 37.90 | [35.76, 40.00] * | [36.49, 39.33] * | 33.65 | [32.57, 34.75] * | [32.90, 34.38] * |
+| test_cv | gmm-hmm monophone (trained by us) − whisper-small zero-shot | 49.75 | [47.52, 51.74] * | [47.75, 51.43] * | 35.87 | [34.51, 37.20] * | [34.90, 36.83] * |
+| test_cv | parakeet-tdt-0.6b-v3 baseline − qwen3-asr-1.7b zero-shot | -23.95 | [-25.37, -22.58] * | [-25.07, -22.91] * | -5.86 | [-6.44, -5.32] * | [-6.20, -5.52] * |
+| test_cv | parakeet-tdt-0.6b-v3 baseline − wav2vec2-xlsr-53-finnish CTC baseline | -35.61 | [-37.93, -33.46] * | [-36.89, -34.27] * | -7.56 | [-8.42, -6.85] * | [-7.92, -7.21] * |
+| test_cv | parakeet-tdt-0.6b-v3 baseline − whisper-small zero-shot | -23.76 | [-25.86, -22.00] * | [-25.66, -22.29] * | -5.34 | [-6.29, -4.67] * | [-6.15, -4.81] * |
+| test_cv | qwen3-asr-1.7b zero-shot − wav2vec2-xlsr-53-finnish CTC baseline | -11.66 | [-13.74, -9.60] * | [-13.05, -10.22] * | -1.70 | [-2.44, -1.05] * | [-2.10, -1.31] * |
 | test_cv | qwen3-asr-1.7b zero-shot − whisper-small zero-shot | 0.19 | [-1.77, 1.80] | [-1.63, 1.69] | 0.52 | [-0.33, 1.13] | [-0.28, 1.06] |
+| test_cv | wav2vec2-xlsr-53-finnish CTC baseline − whisper-small zero-shot | 11.85 | [9.68, 13.95] * | [9.91, 13.60] * | 2.22 | [1.37, 2.99] * | [1.45, 2.81] * |
+| test_cv | whisper-small fine-tuned (ours) − canary-1b-v2 baseline | 13.57 | [12.53, 14.65] * | [12.60, 14.51] * | 2.61 | [2.33, 2.93] * | [2.39, 2.83] * |
+| test_cv | whisper-small fine-tuned (ours) − gmm-hmm monophone (trained by us) | -56.75 | [-58.26, -55.25] * | [-57.94, -55.57] * | -37.97 | [-39.24, -36.68] * | [-38.73, -37.21] * |
+| test_cv | whisper-small fine-tuned (ours) − parakeet-tdt-0.6b-v3 baseline | 16.76 | [15.70, 17.85] * | [15.80, 17.67] * | 3.24 | [2.93, 3.59] * | [3.01, 3.46] * |
 | test_cv | whisper-small fine-tuned (ours) − qwen3-asr-1.7b zero-shot | -7.19 | [-8.37, -6.02] * | [-8.39, -6.01] * | -2.62 | [-3.02, -2.24] * | [-2.95, -2.30] * |
+| test_cv | whisper-small fine-tuned (ours) − wav2vec2-xlsr-53-finnish CTC baseline | -18.85 | [-20.75, -17.05] * | [-20.12, -17.53] * | -4.32 | [-5.06, -3.71] * | [-4.65, -3.99] * |
 | test_cv | whisper-small fine-tuned (ours) − whisper-small zero-shot | -7.00 | [-8.85, -5.60] * | [-8.77, -5.63] * | -2.10 | [-2.94, -1.55] * | [-2.88, -1.60] * |
+| test_parl | canary-1b-v2 baseline − gmm-hmm monophone (trained by us) | -77.05 | [-78.42, -75.69] * | [-77.64, -76.46] * | -44.21 | [-46.21, -42.00] * | [-44.66, -43.74] * |
+| test_parl | canary-1b-v2 baseline − parakeet-tdt-0.6b-v3 baseline | -3.14 | [-3.80, -2.52] * | [-3.54, -2.75] * | -0.44 | [-0.64, -0.25] * | [-0.61, -0.27] * |
+| test_parl | canary-1b-v2 baseline − qwen3-asr-1.7b zero-shot | -16.36 | [-17.61, -14.92] * | [-16.99, -15.73] * | -3.29 | [-3.92, -2.66] * | [-3.54, -3.03] * |
+| test_parl | canary-1b-v2 baseline − wav2vec2-xlsr-53-finnish CTC baseline | -46.08 | [-49.07, -42.70] * | [-46.92, -45.25] * | -9.42 | [-10.70, -8.14] * | [-9.73, -9.10] * |
+| test_parl | canary-1b-v2 baseline − whisper-small zero-shot | -15.53 | [-17.57, -13.69] * | [-17.21, -14.27] * | -4.75 | [-5.73, -3.83] * | [-5.61, -4.09] * |
+| test_parl | gmm-hmm monophone (trained by us) − parakeet-tdt-0.6b-v3 baseline | 73.92 | [72.63, 75.38] * | [73.29, 74.53] * | 43.77 | [41.62, 45.72] * | [43.31, 44.22] * |
+| test_parl | gmm-hmm monophone (trained by us) − qwen3-asr-1.7b zero-shot | 60.70 | [58.96, 62.56] * | [59.95, 61.40] * | 40.92 | [39.05, 42.75] * | [40.50, 41.35] * |
+| test_parl | gmm-hmm monophone (trained by us) − wav2vec2-xlsr-53-finnish CTC baseline | 30.98 | [28.13, 34.19] * | [30.14, 31.85] * | 34.78 | [33.50, 36.09] * | [34.42, 35.14] * |
+| test_parl | gmm-hmm monophone (trained by us) − whisper-small zero-shot | 61.52 | [59.35, 63.50] * | [59.87, 62.89] * | 39.45 | [37.87, 40.87] * | [38.58, 40.24] * |
+| test_parl | parakeet-tdt-0.6b-v3 baseline − qwen3-asr-1.7b zero-shot | -13.22 | [-14.25, -12.14] * | [-13.87, -12.61] * | -2.85 | [-3.42, -2.29] * | [-3.09, -2.61] * |
+| test_parl | parakeet-tdt-0.6b-v3 baseline − wav2vec2-xlsr-53-finnish CTC baseline | -42.94 | [-45.64, -40.05] * | [-43.78, -42.12] * | -8.99 | [-10.14, -7.78] * | [-9.29, -8.69] * |
+| test_parl | parakeet-tdt-0.6b-v3 baseline − whisper-small zero-shot | -12.40 | [-14.37, -10.78] * | [-14.04, -11.14] * | -4.32 | [-5.22, -3.47] * | [-5.19, -3.66] * |
+| test_parl | qwen3-asr-1.7b zero-shot − wav2vec2-xlsr-53-finnish CTC baseline | -29.72 | [-32.09, -27.31] * | [-30.53, -28.95] * | -6.14 | [-7.03, -5.27] * | [-6.39, -5.87] * |
 | test_parl | qwen3-asr-1.7b zero-shot − whisper-small zero-shot | 0.82 | [-0.59, 2.08] | [-0.88, 2.11] | -1.47 | [-2.21, -0.80] * | [-2.32, -0.78] * |
+| test_parl | wav2vec2-xlsr-53-finnish CTC baseline − whisper-small zero-shot | 30.54 | [28.04, 32.87] * | [28.81, 31.96] * | 4.67 | [3.89, 5.48] * | [3.82, 5.38] * |
+| test_parl | whisper-small fine-tuned (ours) − canary-1b-v2 baseline | 14.58 | [13.19, 15.80] * | [13.97, 15.19] * | 2.24 | [1.66, 2.84] * | [1.92, 2.63] * |
+| test_parl | whisper-small fine-tuned (ours) − gmm-hmm monophone (trained by us) | -62.47 | [-64.33, -60.74] * | [-63.19, -61.76] * | -41.97 | [-43.83, -39.99] * | [-42.45, -41.44] * |
+| test_parl | whisper-small fine-tuned (ours) − parakeet-tdt-0.6b-v3 baseline | 11.44 | [10.46, 12.32] * | [10.87, 12.05] * | 1.80 | [1.31, 2.31] * | [1.48, 2.18] * |
 | test_parl | whisper-small fine-tuned (ours) − qwen3-asr-1.7b zero-shot | -1.78 | [-2.34, -1.21] * | [-2.39, -1.14] * | -1.05 | [-1.32, -0.76] * | [-1.35, -0.68] * |
+| test_parl | whisper-small fine-tuned (ours) − wav2vec2-xlsr-53-finnish CTC baseline | -31.50 | [-33.88, -29.20] * | [-32.31, -30.71] * | -7.19 | [-8.15, -6.22] * | [-7.53, -6.77] * |
 | test_parl | whisper-small fine-tuned (ours) − whisper-small zero-shot | -0.96 | [-2.46, 0.26] | [-2.62, 0.31] | -2.52 | [-3.35, -1.72] * | [-3.36, -1.79] * |
+| test_fleurs | canary-1b-v2 baseline − gmm-hmm monophone (trained by us) | -84.23 | [-85.24, -83.13] * | [-84.99, -83.42] * | -50.97 | [-51.87, -50.15] * | [-51.57, -50.38] * |
+| test_fleurs | canary-1b-v2 baseline − parakeet-tdt-0.6b-v3 baseline | -4.47 | [-5.18, -3.71] * | [-5.04, -3.89] * | -0.62 | [-0.85, -0.37] * | [-0.80, -0.44] * |
+| test_fleurs | canary-1b-v2 baseline − qwen3-asr-1.7b zero-shot | -16.28 | [-17.39, -15.12] * | [-17.16, -15.39] * | -3.71 | [-4.06, -3.36] * | [-4.00, -3.43] * |
+| test_fleurs | canary-1b-v2 baseline − wav2vec2-xlsr-53-finnish CTC baseline | -50.64 | [-52.43, -48.83] * | [-52.01, -49.25] * | -13.72 | [-14.82, -12.67] * | [-14.45, -13.01] * |
+| test_fleurs | canary-1b-v2 baseline − whisper-small zero-shot | -17.49 | [-18.67, -16.32] * | [-18.40, -16.57] * | -3.15 | [-3.47, -2.82] * | [-3.43, -2.90] * |
+| test_fleurs | gmm-hmm monophone (trained by us) − parakeet-tdt-0.6b-v3 baseline | 79.75 | [78.49, 80.96] * | [78.86, 80.58] * | 50.35 | [49.48, 51.24] * | [49.74, 50.97] * |
+| test_fleurs | gmm-hmm monophone (trained by us) − qwen3-asr-1.7b zero-shot | 67.95 | [66.67, 69.23] * | [66.93, 68.89] * | 47.26 | [46.46, 48.07] * | [46.66, 47.86] * |
+| test_fleurs | gmm-hmm monophone (trained by us) − wav2vec2-xlsr-53-finnish CTC baseline | 33.59 | [31.88, 35.29] * | [32.16, 34.96] * | 37.24 | [36.56, 37.92] * | [36.74, 37.76] * |
+| test_fleurs | gmm-hmm monophone (trained by us) − whisper-small zero-shot | 66.74 | [65.31, 68.16] * | [65.62, 67.78] * | 47.81 | [47.00, 48.67] * | [47.22, 48.41] * |
+| test_fleurs | parakeet-tdt-0.6b-v3 baseline − qwen3-asr-1.7b zero-shot | -11.81 | [-12.92, -10.63] * | [-12.70, -10.93] * | -3.09 | [-3.46, -2.73] * | [-3.39, -2.80] * |
+| test_fleurs | parakeet-tdt-0.6b-v3 baseline − wav2vec2-xlsr-53-finnish CTC baseline | -46.17 | [-47.94, -44.33] * | [-47.55, -44.77] * | -13.10 | [-14.23, -12.04] * | [-13.86, -12.40] * |
+| test_fleurs | parakeet-tdt-0.6b-v3 baseline − whisper-small zero-shot | -13.01 | [-14.19, -11.87] * | [-13.91, -12.15] * | -2.53 | [-2.82, -2.22] * | [-2.78, -2.30] * |
+| test_fleurs | qwen3-asr-1.7b zero-shot − wav2vec2-xlsr-53-finnish CTC baseline | -34.36 | [-36.19, -32.59] * | [-35.77, -32.91] * | -10.02 | [-11.04, -9.03] * | [-10.73, -9.35] * |
 | test_fleurs | qwen3-asr-1.7b zero-shot − whisper-small zero-shot | -1.21 | [-2.38, -0.03] * | [-2.19, -0.28] * | 0.55 | [0.21, 0.91] * | [0.25, 0.84] * |
+| test_fleurs | wav2vec2-xlsr-53-finnish CTC baseline − whisper-small zero-shot | 33.16 | [31.45, 34.83] * | [31.76, 34.46] * | 10.57 | [9.54, 11.64] * | [9.90, 11.28] * |
+| test_fleurs | whisper-small fine-tuned (ours) − canary-1b-v2 baseline | 19.97 | [18.74, 21.18] * | [19.04, 20.95] * | 3.87 | [3.46, 4.29] * | [3.54, 4.19] * |
+| test_fleurs | whisper-small fine-tuned (ours) − gmm-hmm monophone (trained by us) | -64.26 | [-65.69, -62.84] * | [-65.32, -63.11] * | -47.10 | [-47.94, -46.32] * | [-47.69, -46.54] * |
+| test_fleurs | whisper-small fine-tuned (ours) − parakeet-tdt-0.6b-v3 baseline | 15.50 | [14.31, 16.67] * | [14.59, 16.42] * | 3.25 | [2.83, 3.68] * | [2.92, 3.58] * |
 | test_fleurs | whisper-small fine-tuned (ours) − qwen3-asr-1.7b zero-shot | 3.69 | [2.48, 4.93] * | [2.69, 4.68] * | 0.16 | [-0.24, 0.54] | [-0.15, 0.47] |
+| test_fleurs | whisper-small fine-tuned (ours) − wav2vec2-xlsr-53-finnish CTC baseline | -30.67 | [-32.37, -29.01] * | [-31.95, -29.29] * | -9.86 | [-10.85, -8.94] * | [-10.53, -9.23] * |
 | test_fleurs | whisper-small fine-tuned (ours) − whisper-small zero-shot | 2.49 | [1.50, 3.48] * | [1.65, 3.27] * | 0.71 | [0.34, 1.12] * | [0.41, 1.00] * |
 
 Clusters: test_cv 187 speakers, test_parl 21 speakers, test_fleurs 348 sentences.
