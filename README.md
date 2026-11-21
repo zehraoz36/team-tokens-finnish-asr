@@ -54,12 +54,13 @@ are in `results/data_checks.md` (`scripts/data_checks.py`).
 | Aalto Finnish Parliament ASR Corpus, dev/eval (Zenodo 4581941) | CC BY 4.0 | dev, test |
 | Google FLEURS fi_fi | CC BY 4.0 | test |
 
-### Splits (speaker-disjoint)
+### Split checks
 
-Splits are built **by speaker**, not by clip: all clips of a speaker stay in one split.
-We verified **0 shared speakers** between train and every dev/test set, so no speaker leaks
-from training into testing. FLEURS provides no speaker IDs. Preparation and the split logic:
-`scripts/prepare_data.ipynb`.
+The committed speaker identifiers show **0 overlap between train and the CV/Parliament
+development and test sets**. This checks the available identifiers rather than proving identity
+disjointness across unrelated corpora. FLEURS provides no speaker IDs, so speaker overlap cannot
+be checked for that set. Its bootstrap analysis groups recordings by normalized reference
+sentence, not by speaker. Preparation: `scripts/prepare_data.ipynb`; checks: `results/data_checks.md`.
 
 ## Hugging Face resources
 
@@ -88,34 +89,54 @@ deletions/insertions, RTF/RTFx, hardware, precision, settings) and per-clip pred
 `results/predictions/<system>__<test_set>.csv` (raw and normalized hypothesis). The three test
 sets are reported **separately** and never averaged.
 
-We report both WER and CER because Finnish is agglutinative: a single wrong suffix turns a whole
-word into an error and inflates WER, while CER stays low. Metric choice follows the Hugging Face
+We report both WER and CER because word-level correctness and character-level differences offer
+complementary views. A small ending or spelling change can count as a whole-word substitution;
+CER measures the size of character edits and includes spaces. Actual examples are in
+[the error analysis](results/error_analysis.md). Metric choice follows the Hugging Face
 Audio Course, Chapter 5, "Evaluation":
 https://huggingface.co/learn/audio-course/en/chapter5/evaluation
 
 95% bootstrap confidence intervals (cluster and clip resampling, with paired differences) are in
 `results/bootstrap_ci.md` (`scripts/bootstrap_ci.py`).
 
+The [paired significance analysis](results/paired_significance.md) adds two-sided cluster
+randomization tests for Whisper fine-tuned versus baseline. Holm correction covers the six
+WER/CER-by-test-set hypotheses. This is an exploratory analysis performed after observing test
+scores. The bootstrap intervals remain pointwise, unadjusted intervals.
+
+RTF and RTFx describe recorded computation cost. GMM-HMM uses CPU and excludes precomputed
+MFCC extraction; neural runs use a T4 with different precision and batching. The timing values
+are not an equal-conditions speed ranking. Settings and timing boundaries are recorded per system.
+
 ## Baselines
 
 Every pretrained model is run in standard form (no extra training by our group) and is a
-**baseline**; our own fine-tuning is the **contribution**. We cover all method families from the
-brief and report each system with its exact checkpoint and revision (`results/scores/`).
+**baseline**; our own fine-tuning is the **contribution**. Our trained GMM-HMM also remains a
+baseline, with credit for the group's training work. Exact checkpoints and revisions are in
+`results/scores/`. The [coverage audit](results/model_support_audit.md) documents the completed
+systems and the remaining HuBERT/RNN-T coverage issues.
 
 | Method family | System (checkpoint) | Finnish support | Status |
 |---|---|---|---|
 | Classical MFCC + GMM-HMM | `local/kaldi-grapheme-mono` (trained by us) | trained on our data | done |
 | Self-supervised + CTC | `jonatasgrosman/wav2vec2-large-xlsr-53-finnish` | yes | done |
-| Self-supervised + CTC (HuBERT) | — | no public Finnish HuBERT+CTC checkpoint | not run (see note) |
+| Self-supervised + CTC (HuBERT) | — | suitable Finnish ASR checkpoint not verified in our search | not run (see note) |
 | Attention encoder-decoder | `openai/whisper-small` | yes (multilingual) | done |
 | Attention encoder-decoder | `nvidia/canary-1b-v2` | yes | done |
 | Transducer (TDT) | `nvidia/parakeet-tdt-0.6b-v3` | yes | done |
+| Transducer (RNN-T) | candidate: `samuli/mateli` | yes, according to publisher card | not run |
 | Large audio-language model | `Qwen/Qwen3-ASR-1.7B` | yes | done |
 
-**HuBERT + CTC note:** there is no public Finnish HuBERT model with an ASR/CTC head. Multilingual
-HuBERT encoders such as `utter-project/mHuBERT-147` cover Finnish but ship no ASR head, and the
-brief states a bare encoder is not a baseline. The self-supervised + CTC family is therefore
-represented by the Finnish wav2vec 2.0 + CTC model above.
+**HuBERT + CTC:** we did not verify a suitable Finnish checkpoint in the documented search.
+[`utter-project/mHuBERT-147`](https://huggingface.co/utter-project/mHuBERT-147) is a feature
+encoder, while [`facebook/hubert-large-ls960-ft`](https://huggingface.co/facebook/hubert-large-ls960-ft)
+is an English ASR checkpoint. Neither establishes a Finnish HuBERT baseline. This is a bounded
+search result, not proof that no suitable checkpoint exists.
+
+**RNN-T:** Parakeet is TDT, not plain RNN-T. [`samuli/mateli`](https://huggingface.co/samuli/mateli)
+is a Finnish RNN-T candidate with a published inference implementation. A separate RNN-T run
+remains outstanding under a strict reading of the instructor's list. Model cards and the
+experiment status are linked in [the coverage audit](results/model_support_audit.md).
 
 ## Results
 
@@ -123,7 +144,7 @@ WER / CER in %, corpus-level, same test clips, references and `normalize()` for 
 Full table with checkpoints, revisions, RTF and hardware: `results/results_table.md`
 (`scripts/make_results_table.py`). Confidence intervals: `results/bootstrap_ci.md`.
 
-### Baselines (pretrained, no training by our group)
+### Baselines (including our trained GMM-HMM)
 
 | System | test_cv WER / CER | test_parl WER / CER | test_fleurs WER / CER |
 |---|---:|---:|---:|
@@ -144,19 +165,25 @@ Bold marks the lowest WER on that test set across all systems.
 
 ### Discussion
 
-- **Strongest baselines:** `parakeet-tdt-0.6b-v3` and `canary-1b-v2` (large, recent NVIDIA models)
-  lead on every test set by a wide margin. The classical GMM-HMM and the older wav2vec2 + CTC model
-  are much weaker, as expected.
+- **Strongest baselines:** Parakeet has the lowest WER on CV; Canary has the lowest WER on
+  Parliament and FLEURS. These findings apply to the recorded checkpoints and settings.
 - **Our contribution:** fine-tuning `whisper-small` improves clearly over its own zero-shot baseline
   (test_cv WER 30.94 → 23.93, −7.0; test_parl CER 8.40 → 5.89) and beats the Qwen3-ASR baseline on
-  the in-domain set. It does **not** reach Parakeet/Canary — they are far larger and trained on much
-  more Finnish speech — which is the honest result for a 4.65 h fine-tune.
+  the in-domain set. It does **not** reach Parakeet/Canary in these experiments. This comparison
+  does not isolate the effects of model size, training data, or architecture.
 - **Cross-domain behaviour:** fine-tuning helps most in-domain (test_cv), is mixed on Parliament
   (WER barely changes, CER drops clearly) and regresses on the out-of-domain FLEURS read-speech set
-  (WER +2.5). Specializing on the training domain reduces generalization, which is why we never
-  average across test sets.
-- **WER high, CER low** throughout, as expected for an agglutinative language where one wrong suffix
-  fails a whole word.
+  (WER +2.5). The observed regression is consistent with domain specialization but does not
+  establish its cause. Each test set remains separate.
+- **Statistical uncertainty:** after Holm correction, CV WER/CER and Parliament CER improve,
+  while FLEURS WER/CER worsen. Parliament WER is inconclusive (adjusted p = 0.19932).
+  See [all six comparisons](results/paired_significance.md).
+- **Error patterns:** [actual reference/hypothesis examples](results/error_analysis.md) show
+  word-ending, boundary, name, and number-form differences. These illustrations are not a
+  prevalence estimate or a verified morphological annotation of the corpus.
+- **Limitations:** training uses only 4.65 hours and 10 speakers. Published-model pretraining
+  overlap with the test corpora has not been ruled out. GMM-HMM additionally uses a closed
+  train-only vocabulary, a unigram language model, and grapheme monophones.
 
 ## Repository structure
 
@@ -177,3 +204,8 @@ Bold marks the lowest WER on that test set across all systems.
    `results/scores/<system>.csv` and `results/predictions/<system>__<test_set>.csv`.
 4. Regenerate the summaries: `python scripts/make_results_table.py`, `python scripts/bootstrap_ci.py`,
    `python scripts/data_checks.py`.
+5. Saved-prediction analysis (no GPU): install `requirements-analysis.txt`, then run
+   `python scripts/paired_significance.py` and `python scripts/analyze_saved_errors.py`.
+6. The original GMM notebook preserves the executed troubleshooting session. A separate
+   `scripts/eval_gmm_hmm_clean.ipynb` integrates the installation fixes in execution order;
+   its clean-runtime Colab build has not yet been executed. The original results remain unchanged.
