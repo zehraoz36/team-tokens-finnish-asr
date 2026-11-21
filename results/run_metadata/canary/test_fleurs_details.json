@@ -1,0 +1,49 @@
+{
+  "provenance": {
+    "protocol": {
+      "github_commit": "0e8992b7d24e52200499ccffb991700a3ab8aca8",
+      "dataset": "zehraoz36/team-tokens-finnish-asr-data",
+      "dataset_revision": "2dad7a2dd2b4e688e673b4b9c2526f8aac750ec7",
+      "nemo_version": "3.0.0",
+      "batch_size": 1,
+      "precision": "float32",
+      "normalization": "Unmodified team asr_eval.py: references=manifest text; normalize raw hypothesis once",
+      "timing": "CUDA synchronized; after dev warmup; complete NeMo transcribe call on in-memory audio including temporary dataloader setup, features, transfer, forward and decoding; excludes WAV reading, model loading, downloads, scoring and logging",
+      "decoding": "Checkpoint default decoding; no external LM or test-set tuning; effective decoding config exported with each split",
+      "model": "nvidia/canary-1b-v2",
+      "model_revision": "d455706339a6b32e1aa40f82c713a482a0c938e2",
+      "filename": "canary-1b-v2.nemo",
+      "system": "canary-1b-v2 baseline",
+      "family": "attention encoder-decoder",
+      "language_settings": {
+        "source_lang": "fi",
+        "target_lang": "fi"
+      },
+      "model_key": "canary"
+    },
+    "split": "test_fleurs",
+    "smoke": false,
+    "manifest": "2ac3333eede109e48ce9a033f7a99b71a7dd1776636107434b02043ed57fc4e4",
+    "packages": {
+      "torch": "2.14.1+cu130",
+      "transformers": "4.57.6",
+      "nemo_toolkit": "3.0.0",
+      "lightning": "2.4.0",
+      "numpy": "2.4.6",
+      "lhotse": "1.33.0",
+      "jiwer": "4.0.0",
+      "soundfile": "0.13.1",
+      "huggingface-hub": "0.36.2",
+      "pyarrow": "23.0.1"
+    },
+    "python": "3.13.16",
+    "gpu": "Tesla T4",
+    "cuda": "13.0",
+    "cudnn": 92800,
+    "code": "ac468a980b13ffbb76fd990f368085716141e64cd7373d95e699ccf44a1ee202"
+  },
+  "empty_predictions": 0,
+  "peak_gpu_bytes": 6649832960,
+  "compute_seconds": 704.6996753539979,
+  "audio_seconds": 11827.501
+}
