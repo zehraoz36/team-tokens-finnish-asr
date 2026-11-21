@@ -1,7 +1,7 @@
 # Team Tokens — Finnish ASR
 
 COE025 Natural Language Processing · Project 3.
-Automatic speech recognition (ASR) for Finnish: zero-shot baselines vs. a fine-tuned model,
+Automatic speech recognition (ASR) for Finnish: pretrained baselines vs. a fine-tuned model,
 evaluated across domains.
 
 ## Team
@@ -19,9 +19,9 @@ We fine-tune only on Finnish read speech (Common Voice) and evaluate on three te
 different domains: Common Voice (in-domain read speech), Aalto Parliament (out-of-domain
 spontaneous/formal speech), and FLEURS (out-of-domain read speech). The large Aalto Parliament
 training corpus (~3,100 h) is deliberately **not** used for training. This makes the study a
-**cross-domain ASR robustness evaluation** — how a model trained on one domain generalizes to
-others — rather than a single-domain adaptation. The small training set (4.65 h) is a known
-limitation and is part of what this cross-domain setup tests.
+**cross-domain ASR robustness evaluation** — how models behave across domains — rather than a
+single-domain adaptation. The small training set (4.65 h) is a known limitation and is part of
+what this cross-domain setup tests.
 
 ## Data
 
@@ -42,7 +42,9 @@ ds = load_dataset("zehraoz36/team-tokens-finnish-asr-data")
 | test_fleurs | FLEURS fi_fi test | 916 | 3.29 | – |
 
 Total: 23.6 h (train 4.65 h, dev 7.48 h, test 11.45 h). Clip lists without audio: `data/*.csv`
-(each row has `text` = cleaned/normalized and `raw_text` = original transcript).
+(each row has `text` = cleaned/normalized and `raw_text` = original transcript). Per-split speaker,
+utterance and hour counts, and the number of test sentences that also occur word for word in train,
+are in `results/data_checks.md` (`scripts/data_checks.py`).
 
 ### Sources and licenses
 
@@ -62,15 +64,13 @@ from training into testing. FLEURS provides no speaker IDs. Preparation and the 
 ## Hugging Face resources
 
 Large files are hosted on Hugging Face, not GitHub, because GitHub rejects files over 100 MB.
-This repository holds the code, clip lists, results and predictions; the audio and the trained
+This repository holds the code, clip lists, results and predictions; the audio and the fine-tuned
 model live on Hugging Face and load with one line.
 
 - **Dataset (prepared audio + transcripts):**
   https://huggingface.co/datasets/zehraoz36/team-tokens-finnish-asr-data
-  The ~3.5 GB cleaned 16 kHz audio with trusted references, used by every experiment.
 - **Fine-tuned model:**
   https://huggingface.co/tia88na/whisper-small-fi-tokens
-  Our fine-tuned `openai/whisper-small` (~1 GB). Load it and transcribe Finnish without retraining:
 
   ```python
   from transformers import WhisperForConditionalGeneration, WhisperProcessor
@@ -80,80 +80,100 @@ model live on Hugging Face and load with one line.
 
 ## Evaluation
 
-WER and CER (`jiwer`). Every system is scored on the **same** test clips with the **same**
-text normalization (`normalize()` in `scripts/prepare_data.ipynb`, also applied to every model's
-predictions before scoring). The three test sets are reported **separately**.
-
 All systems use one shared evaluation module, `scripts/asr_eval.py`: references are the dataset's
-`text` column, `normalize()` is applied once to each raw model output, WER/CER are corpus-level
-(total edits / total reference words or characters), and RTF = compute time / audio time. It writes
-`results/scores/<system>.csv` and per-clip predictions `results/predictions/<system>__<test_set>.csv`
-(raw and normalized hypothesis).
+`text` column, the project `normalize()` is applied once to each raw model output, WER/CER are
+corpus-level (total edits / total reference words or characters), and RTF = compute time / audio
+time. It writes `results/scores/<system>.csv` (exact checkpoint revision, WER/CER, substitutions/
+deletions/insertions, RTF/RTFx, hardware, precision, settings) and per-clip predictions
+`results/predictions/<system>__<test_set>.csv` (raw and normalized hypothesis). The three test
+sets are reported **separately** and never averaged.
 
 We report both WER and CER because Finnish is agglutinative: a single wrong suffix turns a whole
 word into an error and inflates WER, while CER stays low. Metric choice follows the Hugging Face
 Audio Course, Chapter 5, "Evaluation":
 https://huggingface.co/learn/audio-course/en/chapter5/evaluation
 
+95% bootstrap confidence intervals (cluster and clip resampling, with paired differences) are in
+`results/bootstrap_ci.md` (`scripts/bootstrap_ci.py`).
+
 ## Baselines
 
-Every pretrained model is run in standard form (no extra training by us) and is a **baseline**.
-Our own fine-tuning is the **contribution**. Each model is reported with its exact checkpoint name.
+Every pretrained model is run in standard form (no extra training by our group) and is a
+**baseline**; our own fine-tuning is the **contribution**. We cover all method families from the
+brief and report each system with its exact checkpoint and revision (`results/scores/`).
 
-| Baseline | Checkpoint | Finnish support | Status |
+| Method family | System (checkpoint) | Finnish support | Status |
 |---|---|---|---|
-| Whisper small | `openai/whisper-small` | yes (multilingual) | done — see Results |
-| Qwen3-ASR | `Qwen/Qwen3-ASR-0.6B` / `1.7B` | yes | in progress |
-| wav2vec 2.0 + CTC | Finnish fine-tuned checkpoint | yes | in progress |
-| Canary | `nvidia/canary-1b-v2` | check model card | in progress |
-| Parakeet | `nvidia/parakeet-tdt-0.6b-v3` | check model card | in progress |
+| Classical MFCC + GMM-HMM | `local/kaldi-grapheme-mono` (trained by us) | trained on our data | done |
+| Self-supervised + CTC | `jonatasgrosman/wav2vec2-large-xlsr-53-finnish` | yes | done |
+| Self-supervised + CTC (HuBERT) | — | no public Finnish HuBERT+CTC checkpoint | not run (see note) |
+| Attention encoder-decoder | `openai/whisper-small` | yes (multilingual) | done |
+| Attention encoder-decoder | `nvidia/canary-1b-v2` | yes | done |
+| Transducer (TDT) | `nvidia/parakeet-tdt-0.6b-v3` | yes | done |
+| Large audio-language model | `Qwen/Qwen3-ASR-1.7B` | yes | done |
 
-If a checkpoint does not support Finnish, it is noted here with a link to its model card and not run.
+**HuBERT + CTC note:** there is no public Finnish HuBERT model with an ASR/CTC head. Multilingual
+HuBERT encoders such as `utter-project/mHuBERT-147` cover Finnish but ship no ASR head, and the
+brief states a bare encoder is not a baseline. The self-supervised + CTC family is therefore
+represented by the Finnish wav2vec 2.0 + CTC model above.
 
-## Results — Whisper small (baseline vs fine-tuned)
+## Results
 
-Baseline = `openai/whisper-small` zero-shot. Fine-tuned = the same checkpoint trained by us on the
-Finnish train split (effective batch 16, lr 1e-5, 800 steps, fp16; best checkpoint chosen on dev by WER).
-Same test clips, same `normalize()`, same scoring.
+WER / CER in %, corpus-level, same test clips, references and `normalize()` for every system.
+Full table with checkpoints, revisions, RTF and hardware: `results/results_table.md`
+(`scripts/make_results_table.py`). Confidence intervals: `results/bootstrap_ci.md`.
 
-| Test set | Baseline WER | Baseline CER | Fine-tuned WER | Fine-tuned CER |
-|---|---:|---:|---:|---:|
-| test_cv | 30.94 | 6.71 | 23.93 | 4.61 |
-| test_parl | 25.68 | 8.40 | 24.72 | 5.89 |
-| test_fleurs | 26.41 | 5.26 | 28.87 | 5.97 |
+### Baselines (pretrained, no training by our group)
 
-These are the first-run numbers, kept unchanged in `results/legacy/results.csv` (predictions: `results/legacy/predictions/`).
-All systems are now scored with the shared evaluation code; the current numbers (Whisper re-scored, Qwen3-ASR 1.7B)
-are in `results/scores/` and per-clip predictions in `results/predictions/`. With the shared code, FLEURS changes slightly
-(baseline 26.41 → 26.37, fine-tuned 28.87 → 28.85) because the first run normalized some references twice.
-Generated summaries: `results/results_table.md` (all systems, `scripts/make_results_table.py`),
-`results/bootstrap_ci.md` (95% confidence intervals, `scripts/bootstrap_ci.py`) and
-`results/data_checks.md` (speakers, hours, test sentences found in train, `scripts/data_checks.py`).
-Training and evaluation: `scripts/finnish_asr_whisper_finetune.ipynb`.
-Fine-tuned model: https://huggingface.co/tia88na/whisper-small-fi-tokens
+| System | test_cv WER / CER | test_parl WER / CER | test_fleurs WER / CER |
+|---|---:|---:|---:|
+| parakeet-tdt-0.6b-v3 | **7.17** / 1.37 | 13.28 / 4.09 | 13.35 / 2.72 |
+| canary-1b-v2 | 10.36 / 2.00 | **10.14** / 3.65 | **8.88** / 2.10 |
+| qwen3-asr-1.7b zero-shot | 31.13 / 7.23 | 26.50 / 6.94 | 25.16 / 5.81 |
+| whisper-small zero-shot | 30.94 / 6.71 | 25.68 / 8.40 | 26.37 / 5.26 |
+| wav2vec2-xlsr-53-finnish + CTC | 42.78 / 8.93 | 56.22 / 13.07 | 59.52 / 15.83 |
+| gmm-hmm monophone (trained by us) | 80.69 / 42.58 | 87.20 / 47.86 | 93.11 / 53.07 |
+
+### Our contribution (trained by our group)
+
+| System | test_cv WER / CER | test_parl WER / CER | test_fleurs WER / CER |
+|---|---:|---:|---:|
+| whisper-small fine-tuned (ours) | 23.93 / 4.61 | 24.72 / 5.89 | 28.85 / 5.97 |
+
+Bold marks the lowest WER on that test set across all systems.
 
 ### Discussion
 
-These results are read as a cross-domain robustness check: the model trained on Common Voice is
-strongest in-domain and degrades on the out-of-domain sets.
-
-- **test_cv (in-domain):** largest gain (WER −7.0, CER −2.1); the training data is Common Voice.
-- **test_parl (out-of-domain, spontaneous):** small WER change (−1.0) but clear CER drop (−2.5);
-  harder, different domain.
-- **test_fleurs (out-of-domain, read):** fine-tuning regresses (WER +2.5). Specializing on the
-  training domain reduces generalization — which is why we never average across test sets.
-- **WER high, CER low** throughout, as expected for an agglutinative language.
+- **Strongest baselines:** `parakeet-tdt-0.6b-v3` and `canary-1b-v2` (large, recent NVIDIA models)
+  lead on every test set by a wide margin. The classical GMM-HMM and the older wav2vec2 + CTC model
+  are much weaker, as expected.
+- **Our contribution:** fine-tuning `whisper-small` improves clearly over its own zero-shot baseline
+  (test_cv WER 30.94 → 23.93, −7.0; test_parl CER 8.40 → 5.89) and beats the Qwen3-ASR baseline on
+  the in-domain set. It does **not** reach Parakeet/Canary — they are far larger and trained on much
+  more Finnish speech — which is the honest result for a 4.65 h fine-tune.
+- **Cross-domain behaviour:** fine-tuning helps most in-domain (test_cv), is mixed on Parliament
+  (WER barely changes, CER drops clearly) and regresses on the out-of-domain FLEURS read-speech set
+  (WER +2.5). Specializing on the training domain reduces generalization, which is why we never
+  average across test sets.
+- **WER high, CER low** throughout, as expected for an agglutinative language where one wrong suffix
+  fails a whole word.
 
 ## Repository structure
 
 - `data/` — clip lists (CSV), one per split, plus `summary.csv` (`text` = cleaned, `raw_text` = original)
-- `scripts/` — `prepare_data.ipynb` (data), `finnish_asr_whisper_finetune.ipynb` (fine-tuning), `asr_eval.py` (shared evaluation), `eval_*.ipynb` (one notebook per evaluated model family)
-- `results/` — `scores/` (one WER/CER/RTF file per system), `predictions/` (per-clip predictions), `legacy/` (first-run results)
+- `scripts/` — `prepare_data.ipynb` (data), `finnish_asr_whisper_finetune.ipynb` (fine-tuning),
+  `asr_eval.py` (shared evaluation), `eval_*.ipynb` (one notebook per evaluated system),
+  `make_results_table.py`, `bootstrap_ci.py`, `data_checks.py`
+- `results/` — `scores/` (one file per system), `predictions/` (per-clip predictions),
+  `run_metadata/` (per-system protocol and config), `results_table.md`, `bootstrap_ci.md`,
+  `data_checks.md`, `legacy/` (first-run results)
 - `contributions/` — per-member contribution notes
 
 ## Reproduce
 
 1. `load_dataset("zehraoz36/team-tokens-finnish-asr-data")`
-2. Open `scripts/finnish_asr_whisper_finetune.ipynb` in Colab (T4 GPU), run top to bottom.
-3. Baseline, fine-tuning and the comparison table are produced in order (first-run output: `results/legacy/results.csv`).
-4. Every system is then scored with `scripts/asr_eval.py`: `scripts/eval_whisper.ipynb` (Whisper baseline + fine-tuned), `scripts/eval_qwen3_asr.ipynb` (Qwen3-ASR).
+2. Fine-tuning: `scripts/finnish_asr_whisper_finetune.ipynb` in Colab (T4 GPU), top to bottom.
+3. Score any system with the shared code via its `scripts/eval_<system>.ipynb`; each writes
+   `results/scores/<system>.csv` and `results/predictions/<system>__<test_set>.csv`.
+4. Regenerate the summaries: `python scripts/make_results_table.py`, `python scripts/bootstrap_ci.py`,
+   `python scripts/data_checks.py`.
