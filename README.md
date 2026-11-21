@@ -114,7 +114,7 @@ Every pretrained model is run in standard form (no extra training by our group) 
 **baseline**; our own fine-tuning is the **contribution**. Our trained GMM-HMM also remains a
 baseline, with credit for the group's training work. Exact checkpoints and revisions are in
 `results/scores/`. The [coverage audit](results/model_support_audit.md) documents the completed
-systems and the remaining HuBERT/RNN-T coverage issues.
+systems and the remaining HuBERT checkpoint limitation.
 
 | Method family | System (checkpoint) | Finnish support | Status |
 |---|---|---|---|
@@ -124,7 +124,7 @@ systems and the remaining HuBERT/RNN-T coverage issues.
 | Attention encoder-decoder | `openai/whisper-small` | yes (multilingual) | done |
 | Attention encoder-decoder | `nvidia/canary-1b-v2` | yes | done |
 | Transducer (TDT) | `nvidia/parakeet-tdt-0.6b-v3` | yes | done |
-| Transducer (RNN-T) | candidate: `samuli/mateli` | yes, according to publisher card | not run |
+| Transducer (RNN-T) | `samuli/mateli` | Finnish RNN-T | done (baseline) |
 | Large audio-language model | `Qwen/Qwen3-ASR-1.7B` | yes | done |
 
 **HuBERT + CTC:** we did not verify a suitable Finnish checkpoint in the documented search.
@@ -133,10 +133,12 @@ encoder, while [`facebook/hubert-large-ls960-ft`](https://huggingface.co/faceboo
 is an English ASR checkpoint. Neither establishes a Finnish HuBERT baseline. This is a bounded
 search result, not proof that no suitable checkpoint exists.
 
-**RNN-T:** Parakeet is TDT, not plain RNN-T. [`samuli/mateli`](https://huggingface.co/samuli/mateli)
-is a Finnish RNN-T candidate with a published inference implementation. A separate RNN-T run
-remains outstanding under a strict reading of the instructor's list. Model cards and the
-experiment status are linked in [the coverage audit](results/model_support_audit.md).
+**RNN-T:** Parakeet is TDT, not plain RNN-T. We evaluated the Finnish `samuli/mateli`
+checkpoint (revision `3dd0f094234d565dc923391eee15c4425feafdea`) as a separate published
+baseline on all three test sets. Results and the inference setup are in
+[`results/scores/mateli-rnn-t-baseline.csv`](results/scores/mateli-rnn-t-baseline.csv),
+the [Mateli notebook](scripts/eval_mateli_rnnt.ipynb), and the
+[coverage audit](results/model_support_audit.md). It is not a team fine-tune.
 
 ## Results
 
@@ -150,6 +152,7 @@ Full table with checkpoints, revisions, RTF and hardware: `results/results_table
 |---|---:|---:|---:|
 | parakeet-tdt-0.6b-v3 | **7.17** / 1.37 | 13.28 / 4.09 | 13.35 / 2.72 |
 | canary-1b-v2 | 10.36 / 2.00 | **10.14** / 3.65 | **8.88** / 2.10 |
+| mateli RNN-T baseline | 15.02 / 3.12 | 12.61 / 3.77 | 17.21 / 6.96 |
 | qwen3-asr-1.7b zero-shot | 31.13 / 7.23 | 26.50 / 6.94 | 25.16 / 5.81 |
 | whisper-small zero-shot | 30.94 / 6.71 | 25.68 / 8.40 | 26.37 / 5.26 |
 | wav2vec2-xlsr-53-finnish + CTC | 42.78 / 8.93 | 56.22 / 13.07 | 59.52 / 15.83 |
@@ -166,7 +169,8 @@ Bold marks the lowest WER on that test set across all systems.
 ### Discussion
 
 - **Strongest baselines:** Parakeet has the lowest WER on CV; Canary has the lowest WER on
-  Parliament and FLEURS. These findings apply to the recorded checkpoints and settings.
+  Parliament and FLEURS. Mateli is a separate Finnish RNN-T baseline; its three domain results
+  are reported independently and are not averaged.
 - **Our contribution:** fine-tuning `whisper-small` improves clearly over its own zero-shot baseline
   (test_cv WER 30.94 → 23.93, −7.0; test_parl CER 8.40 → 5.89) and beats the Qwen3-ASR baseline on
   the in-domain set. It does **not** reach Parakeet/Canary in these experiments. This comparison
@@ -186,6 +190,14 @@ Bold marks the lowest WER on that test set across all systems.
   train-only vocabulary, a unigram language model, and grapheme monophones.
 
 ## Repository structure
+
+Root files: `.gitignore` documents ignored local/build artifacts; `LICENSE` covers our code;
+`requirements.txt` and `requirements-analysis.txt` list runtime dependencies;
+`test_paired_significance.py` contains paired-statistics unit tests. The root-level
+`error_summary.csv`, `error_examples.csv`, `error_analysis_metadata.json`,
+`paired_significance.csv`, and `paired_significance_metadata.json` are generated compatibility
+copies of the canonical outputs under `results/`. Both analysis scripts regenerate both locations;
+use the `results/` files in project reports.
 
 - `data/` — clip lists (CSV), one per split, plus `summary.csv` (`text` = cleaned, `raw_text` = original)
 - `scripts/` — `prepare_data.ipynb` (data), `finnish_asr_whisper_finetune.ipynb` (fine-tuning),

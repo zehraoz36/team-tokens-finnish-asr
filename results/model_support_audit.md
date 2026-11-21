@@ -23,18 +23,23 @@ All six baselines have saved predictions on the three project test sets. The gro
 
 Status: not run; publish the specific exclusions and search limitation. If a valid Finnish HuBERT+CTC checkpoint is identified, evaluate it under the same protocol.
 
-## RNN-T remains an unrun supported family
+## Finnish RNN-T baseline evaluated
 
-Parakeet TDT is a transducer, but its checkpoint must not be relabeled as plain RNN-T. Two public cards identify Finnish-capable RNN-T candidates:
+Parakeet TDT is a transducer but is not relabeled as plain RNN-T. The project separately evaluated the Finnish `samuli/mateli` RNN-T checkpoint as a published baseline (no team fine-tuning).
 
-| Candidate | Evidence | Status in this project |
-|---|---|---|
-| [`samuli/mateli`](https://huggingface.co/samuli/mateli) | Finnish-only model; RNN-T decoder and loss; approximately 59.6M parameters; 16 kHz mono input; reference PyTorch inference implementation | Not run |
-| [`nvidia/nemotron-3.5-asr-streaming-0.6b`](https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b) | Cache-aware FastConformer-RNNT; Finnish `fi-FI` is in the broad-coverage, ready-to-transcribe tier | Not run |
+| Checkpoint | Model revision | Evidence | Status |
+|---|---|---|---|
+| [`samuli/mateli`](https://huggingface.co/samuli/mateli) | `3dd0f094234d565dc923391eee15c4425feafdea` | [Evaluation notebook](../scripts/eval_mateli_rnnt.ipynb), [scores](scores/mateli-rnn-t-baseline.csv), [run metadata](run_metadata/mateli_rnnt_run_metadata.json) | Evaluated on all three project test sets |
 
-The existence of these candidates means that an exclusion based on "no Finnish RNN-T support" is not justified. To satisfy a strict reading of the instructor's separate RNN-T entry, one suitable RNN-T system still needs evaluation. Do not claim full baseline coverage until that is done or the instructor explicitly accepts the existing TDT experiment for that entry.
+| Test set | WER (%) | CER (%) | Clips | RTF |
+|---|---:|---:|---:|---:|
+| `test_cv` | 15.02 | 3.12 | 1,833 | 0.0866 |
+| `test_parl` | 12.61 | 3.77 | 1,913 | 0.0867 |
+| `test_fleurs` | 17.21 | 6.96 | 916 | 0.0851 |
 
-For a new run, freeze the exact checkpoint revision and inference code, retain the existing references and normalization, validate on development clips, then evaluate all three full test sets without test-based tuning. Preserve empty outputs and record hardware, precision, batch size, language settings, and timing boundaries. No scores from a publisher's different test set may substitute for this experiment.
+The run used the publisher's reference implementation, greedy RNN-T decoding, mono 16 kHz float32 input, batch size 1, and a Tesla T4. Recorded inference compute time totals about 59.2 minutes across the three sets; loading and audio decoding are outside the shared evaluator's timing window. The tests use the project's fixed references and shared normalization/scoring. Mateli's publisher reports a large, mixed-source Finnish training corpus, so overlap with the project test sources has not been ruled out.
+
+`nvidia/nemotron-3.5-asr-streaming-0.6b` is another Finnish-capable RNN-T candidate, but it was not run. It is an additional candidate, not needed to claim that the RNN-T family has a completed Finnish baseline in this project.
 
 ## Training-data overlap and reference integrity
 

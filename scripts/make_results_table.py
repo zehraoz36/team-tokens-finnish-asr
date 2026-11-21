@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import asr_eval as E  # noqa: E402
 
 OUT = "results/results_table.md"
-TITLES = {"baseline": "Baselines (pretrained, no training by our group)",
+TITLES = {"baseline": "Baselines (including our trained GMM-HMM)",
           "contribution": "Our contribution (trained by our group)"}
 
 
