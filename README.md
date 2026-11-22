@@ -185,6 +185,14 @@ Bold marks the lowest WER on that test set across all systems.
 - **Error patterns:** [actual reference/hypothesis examples](results/error_analysis.md) show
   word-ending, boundary, name, and number-form differences. These illustrations are not a
   prevalence estimate or a verified morphological annotation of the corpus.
+- **Qwen3-ASR precision check:** Qwen ran in float16 because the T4 has no native bfloat16. To
+  test whether this explains its high WER, the same checkpoint was run in float16 and float32 on
+  400 development clips (200 `dev_cv` + 200 `dev_parl`, evenly spaced; no test clips). Combined
+  dev WER is identical (31.82 vs 31.82; CER 9.32 vs 9.36) and 390 of 400 normalized outputs are
+  the same, so the float16 test result is kept (decision rule fixed in advance: re-run only if
+  float32 is at least 1.0 WER lower). Qwen's gap to Canary/Parakeet is therefore not a precision
+  artifact. Details: [`results/qwen_precision_check.csv`](results/qwen_precision_check.csv),
+  [notebook](scripts/qwen_precision_check.ipynb).
 - **Limitations:** training uses only 4.65 hours and 10 speakers. Published-model pretraining
   overlap with the test corpora has not been ruled out. GMM-HMM additionally uses a closed
   train-only vocabulary, a unigram language model, and grapheme monophones.

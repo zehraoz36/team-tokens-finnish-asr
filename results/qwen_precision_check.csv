@@ -1,0 +1,7 @@
+precision,subset,clips,seconds,wer,cer,substitutions,deletions,insertions,ref_words,model,revision,hardware,qwen_asr,transformers,decision_rerun_float32
+float16,dev_cv,200,43.9,33.76,8.66,368,47,30,1318,Qwen/Qwen3-ASR-1.7B,7278e1e70fe206f11671096ffdd38061171dd6e5,Tesla T4 (torch 2.14.1+cu130),0.0.6,4.57.6,False
+float16,dev_parl,200,131.5,31.18,9.53,923,237,100,4041,Qwen/Qwen3-ASR-1.7B,7278e1e70fe206f11671096ffdd38061171dd6e5,Tesla T4 (torch 2.14.1+cu130),0.0.6,4.57.6,False
+float16,combined,400,175.4,31.82,9.32,1291,284,130,5359,Qwen/Qwen3-ASR-1.7B,7278e1e70fe206f11671096ffdd38061171dd6e5,Tesla T4 (torch 2.14.1+cu130),0.0.6,4.57.6,False
+float32,dev_cv,200,106.8,33.69,8.7,368,46,30,1318,Qwen/Qwen3-ASR-1.7B,7278e1e70fe206f11671096ffdd38061171dd6e5,Tesla T4 (torch 2.14.1+cu130),0.0.6,4.57.6,False
+float32,dev_parl,200,324.4,31.21,9.57,923,236,102,4041,Qwen/Qwen3-ASR-1.7B,7278e1e70fe206f11671096ffdd38061171dd6e5,Tesla T4 (torch 2.14.1+cu130),0.0.6,4.57.6,False
+float32,combined,400,431.1,31.82,9.36,1291,282,132,5359,Qwen/Qwen3-ASR-1.7B,7278e1e70fe206f11671096ffdd38061171dd6e5,Tesla T4 (torch 2.14.1+cu130),0.0.6,4.57.6,False

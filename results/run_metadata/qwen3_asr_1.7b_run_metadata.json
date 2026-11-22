@@ -29,5 +29,20 @@
   },
   "model_card": "https://huggingface.co/Qwen/Qwen3-ASR-1.7B",
   "notebook": "scripts/eval_qwen3_asr.ipynb",
-  "notes": "Standard pretrained Qwen3-ASR 1.7B; no additional training by the group. float16 because the T4 has no native bfloat16. The optional Qwen3-ASR-0.6B run (RUN_06B in the notebook) was not performed. Prediction files have the same clip ids and references as the dataset clip lists in data/."
+  "notes": "Standard pretrained Qwen3-ASR 1.7B; no additional training by the group. float16 because the T4 has no native bfloat16; a float16 vs float32 check on development clips showed no accuracy difference (see precision_check). The optional Qwen3-ASR-0.6B run (RUN_06B in the notebook) was not performed. Prediction files have the same clip ids and references as the dataset clip lists in data/.",
+  "precision_check": {
+    "notebook": "scripts/qwen_precision_check.ipynb",
+    "results": "results/qwen_precision_check.csv",
+    "data": "400 development clips (200 dev_cv + 200 dev_parl, evenly spaced); no test clips",
+    "float16_dev_wer_cer": [
+      31.82,
+      9.32
+    ],
+    "float32_dev_wer_cer": [
+      31.82,
+      9.36
+    ],
+    "identical_normalized_outputs": "390/400",
+    "decision": "keep float16 (rule: re-run test sets only if float32 is at least 1.0 WER lower on dev)"
+  }
 }

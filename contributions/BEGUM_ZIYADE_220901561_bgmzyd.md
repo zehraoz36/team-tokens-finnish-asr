@@ -97,6 +97,9 @@ fine-tuning). Qwen3-ASR uses forced `language="Finnish"`, greedy decoding, max 2
 - **Language support:** Finnish is in `SUPPORTED_LANGUAGES` of the `qwen-asr` package (checked in the
   package source and asserted in the notebook); Whisper small is a multilingual (not `.en`)
   checkpoint and is run with the language forced to Finnish.
+- **Qwen precision:** Qwen ran in float16 on the T4. I checked on 400 development clips that float32
+  gives the same WER (31.82 vs 31.82, 390/400 identical outputs), so the float16 result stands
+  (`scripts/qwen_precision_check.ipynb`, `results/qwen_precision_check.csv`).
 - **Test set use:** no setting was tuned on the test sets. The Qwen pipeline check uses 8
   development clips only.
 
