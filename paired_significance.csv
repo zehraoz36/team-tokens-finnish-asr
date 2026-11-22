@@ -1,7 +1,0 @@
-test_set,metric,model_a,model_b,a_percent,b_percent,difference_pp,ci95_cluster,cluster_unit,n_clips,n_clusters,p_raw,extreme_count,permutations,method,seed,p_holm,reject_holm_005,holm_family_size
-test_cv,wer,whisper-small fine-tuned (ours),whisper-small zero-shot,23.933690208944913,30.935935071662925,-7.002244862718011,"[-8.85, -5.60]",speaker,1833,187,1e-05,0,99999,monte_carlo,20261121,6.000000000000001e-05,True,6
-test_cv,cer,whisper-small fine-tuned (ours),whisper-small zero-shot,4.609182927639593,6.708897207025626,-2.099714279386033,"[-2.94, -1.55]",speaker,1833,187,1e-05,0,99999,monte_carlo,20261122,6.000000000000001e-05,True,6
-test_parl,wer,whisper-small fine-tuned (ours),whisper-small zero-shot,24.721564500570025,25.677453301762693,-0.9558888011926686,"[-2.46, 0.26]",speaker,1913,21,0.19932,19931,99999,monte_carlo,20261123,0.19932,False,6
-test_parl,cer,whisper-small fine-tuned (ours),whisper-small zero-shot,5.887215282880235,8.403747244673035,-2.5165319617927993,"[-3.35, -1.72]",speaker,1913,21,1e-05,0,99999,monte_carlo,20261124,6.000000000000001e-05,True,6
-test_fleurs,wer,whisper-small fine-tuned (ours),whisper-small zero-shot,28.85257065032346,26.367041198501873,2.4855294518215865,"[1.50, 3.48]",normalized_sentence,916,348,1e-05,0,99999,monte_carlo,20261125,6.000000000000001e-05,True,6
-test_fleurs,cer,whisper-small fine-tuned (ours),whisper-small zero-shot,5.971103129146037,5.257580170210012,0.7135229589360256,"[0.34, 1.12]",normalized_sentence,916,348,0.00057,56,99999,monte_carlo,20261126,0.00114,True,6
