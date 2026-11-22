@@ -99,7 +99,6 @@ def main():
     for r, adjusted in zip(rows, holm([r["p_raw"] for r in rows])):
         r.update(p_holm=float(adjusted), reject_holm_005=bool(adjusted <= .05), holm_family_size=6)
     write_csv(ROOT / "results/paired_significance.csv", rows)
-    write_csv(ROOT / "paired_significance.csv", rows)
     lines = ["# Whisper fine-tuning: paired significance analysis", "",
         "Exploratory analysis of saved predictions. The existing test scores were known before this analysis was specified. "
         "The fixed contrast is our Whisper fine-tune minus its original Whisper baseline, evaluated for WER and CER "
@@ -146,7 +145,6 @@ def main():
         seed=args.seed, permutations=args.permutations, family_size=6, exploratory=True,
         validated_system_test_pairs=len(data), input_sha256=hashes(files + [ci_path] + scripts))
     (ROOT / "results/paired_significance_metadata.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
-    (ROOT / "paired_significance_metadata.json").write_text((ROOT / "results/paired_significance_metadata.json").read_text(encoding="utf-8"), encoding="utf-8")
     print("\n".join(lines[:13]))
 
 
