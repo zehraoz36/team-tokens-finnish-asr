@@ -1,0 +1,24 @@
+{
+  "system": "whisper-small zero-shot",
+  "role": "baseline (published checkpoint; no team fine-tuning)",
+  "model_id": "openai/whisper-small",
+  "model_revision": "973afd24965f72e36ca33b3055d56a652f456b4d",
+  "dataset_id": "zehraoz36/team-tokens-finnish-asr-data",
+  "dataset_revision": "2dad7a2dd2b4e688e673b4b9c2526f8aac750ec7",
+  "test_splits": [
+    "test_cv",
+    "test_parl",
+    "test_fleurs"
+  ],
+  "sampling_rate_hz": 16000,
+  "decoding": "greedy; language=fi, task=transcribe; max_new_tokens=225; 30 s window",
+  "normalization_and_scoring": "scripts/asr_eval.py (shared project normalize() and corpus WER/CER)",
+  "hardware": "Tesla T4",
+  "torch_version": "2.14.1+cu130",
+  "transformers_version": "5.23.0",
+  "precision": "float16",
+  "batch_size": 16,
+  "run_date": "2026-11-19",
+  "model_card": "https://huggingface.co/openai/whisper-small",
+  "notes": "Standard multilingual whisper-small (not the .en variant); no additional training by the group. Scored on all three project test sets with the shared evaluator."
+}

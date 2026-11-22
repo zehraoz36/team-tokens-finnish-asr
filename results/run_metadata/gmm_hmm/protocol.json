@@ -1,0 +1,9 @@
+{
+  "github_commit": "0e8992b7d24e52200499ccffb991700a3ab8aca8",
+  "dataset": "zehraoz36/team-tokens-finnish-asr-data",
+  "dataset_revision": "2dad7a2dd2b4e688e673b4b9c2526f8aac750ec7",
+  "kaldi_revision": "e02e35f0254bb033fab73d1df99fc34123e31d56",
+  "references": "Frozen manifest text column, never normalized twice",
+  "hypotheses": "asr_eval.normalize(raw decoder text), exactly once",
+  "decoding": "Fixed before test; train-only grapheme lexicon and add-one unigram LM"
+}

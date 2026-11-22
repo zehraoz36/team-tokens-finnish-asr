@@ -1,0 +1,29 @@
+{
+  "github_commit": "0e8992b7d24e52200499ccffb991700a3ab8aca8",
+  "dataset": "zehraoz36/team-tokens-finnish-asr-data",
+  "dataset_revision": "2dad7a2dd2b4e688e673b4b9c2526f8aac750ec7",
+  "nemo_version": "3.0.0",
+  "batch_size": 1,
+  "precision": "float32",
+  "normalization": "Unmodified team asr_eval.py: references=manifest text; normalize raw hypothesis once",
+  "timing": "CUDA synchronized; after dev warmup; complete NeMo transcribe call on in-memory audio including temporary dataloader setup, features, transfer, forward and decoding; excludes WAV reading, model loading, downloads, scoring and logging",
+  "decoding": "Checkpoint default decoding; no external LM or test-set tuning; effective decoding config exported with each split",
+  "models": {
+    "canary": {
+      "model": "nvidia/canary-1b-v2",
+      "model_revision": "d455706339a6b32e1aa40f82c713a482a0c938e2",
+      "filename": "canary-1b-v2.nemo",
+      "system": "canary-1b-v2 baseline",
+      "family": "attention encoder-decoder",
+      "language_settings": {"source_lang": "fi", "target_lang": "fi"}
+    },
+    "parakeet": {
+      "model": "nvidia/parakeet-tdt-0.6b-v3",
+      "model_revision": "541d1f99c6b0c3cd0b11a95167540bb8edefd82b",
+      "filename": "parakeet-tdt-0.6b-v3.nemo",
+      "system": "parakeet-tdt-0.6b-v3 baseline",
+      "family": "Token-and-Duration Transducer (TDT), not plain RNN-T",
+      "language_settings": {}
+    }
+  }
+}

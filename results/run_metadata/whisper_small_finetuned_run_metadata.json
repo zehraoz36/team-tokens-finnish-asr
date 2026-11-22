@@ -1,0 +1,37 @@
+{
+  "system": "whisper-small fine-tuned (ours)",
+  "role": "team contribution (fine-tuned by the group)",
+  "model_id": "tia88na/whisper-small-fi-tokens",
+  "model_revision": "58b213c9aa28aef2b7c734c4cfe2be9530ee336c",
+  "base_checkpoint": "openai/whisper-small",
+  "dataset_id": "zehraoz36/team-tokens-finnish-asr-data",
+  "dataset_revision": "2dad7a2dd2b4e688e673b4b9c2526f8aac750ec7",
+  "training_split": "train",
+  "test_splits": [
+    "test_cv",
+    "test_parl",
+    "test_fleurs"
+  ],
+  "sampling_rate_hz": 16000,
+  "training": {
+    "effective_batch_size": 16,
+    "per_device_batch_size": 8,
+    "gradient_accumulation_steps": 2,
+    "learning_rate": 1e-05,
+    "warmup_steps": 100,
+    "max_steps": 800,
+    "precision": "fp16",
+    "gradient_checkpointing": true,
+    "checkpoint_selection": "lowest dev WER (load_best_model_at_end)"
+  },
+  "decoding": "greedy; language=fi, task=transcribe; max_new_tokens=225; 30 s window",
+  "normalization_and_scoring": "scripts/asr_eval.py (shared project normalize() and corpus WER/CER)",
+  "hardware": "Tesla T4",
+  "torch_version": "2.14.1+cu130",
+  "transformers_version": "5.23.0",
+  "precision": "float16",
+  "batch_size": 16,
+  "run_date": "2026-11-19",
+  "model_card": "https://huggingface.co/tia88na/whisper-small-fi-tokens",
+  "notebook": "scripts/finnish_asr_whisper_finetune.ipynb"
+}

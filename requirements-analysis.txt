@@ -1,0 +1,5 @@
+# No GPU packages needed for analysis of the saved predictions.
+numpy==2.4.6
+jiwer==4.0.0
+rapidfuzz==3.14.6
+pandas>=2.2

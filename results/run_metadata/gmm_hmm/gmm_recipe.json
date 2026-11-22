@@ -1,0 +1,66 @@
+{
+  "recipe": {
+    "protocol": {
+      "github_commit": "0e8992b7d24e52200499ccffb991700a3ab8aca8",
+      "dataset": "zehraoz36/team-tokens-finnish-asr-data",
+      "dataset_revision": "2dad7a2dd2b4e688e673b4b9c2526f8aac750ec7",
+      "kaldi_revision": "e02e35f0254bb033fab73d1df99fc34123e31d56",
+      "references": "Frozen manifest text column, never normalized twice",
+      "hypotheses": "asr_eval.normalize(raw decoder text), exactly once",
+      "decoding": "Fixed before test; train-only grapheme lexicon and add-one unigram LM"
+    },
+    "normalizer": "repo-asr_eval-0e8992b",
+    "model": "MFCC + deltas + grapheme GMM-HMM, monophone, 1000 Gaussians",
+    "acoustic_units": "Unicode graphemes, explicitly a pronunciation approximation",
+    "language_model": "Train-only add-one unigram, including end-of-sentence probability",
+    "vocabulary_source": "train normalized text only; no dev/test vocabulary or LM training",
+    "training_manifest_digest": "700d79341e5be971828a5162d14a0d809f940d0a6a6a60f50667a3d1456583a5",
+    "cmvn": "utterance-level mean normalization, no variance normalization",
+    "num_iters": 40,
+    "totgauss": 1000,
+    "nj": 2,
+    "acoustic_scale": 0.083333,
+    "beam": 13,
+    "lattice_beam": 6,
+    "vocabulary_size": 6235,
+    "lexicon_sha256": "d761ba37f3ccc973ead8bea8fe4039f23466c523576e5706aadd8dd63722e4ca",
+    "grammar_sha256": "1964dbf8425eedce86ab2564beaf99cf70bd201b15cab904e05e0569cd4aae68",
+    "oov_diagnostic": {
+      "train": {
+        "words": 23938,
+        "oov_tokens": 0,
+        "oov_rate": 0.0
+      },
+      "dev_cv": {
+        "words": 11760,
+        "oov_tokens": 4437,
+        "oov_rate": 0.37729591836734694
+      },
+      "dev_parl": {
+        "words": 34376,
+        "oov_tokens": 14685,
+        "oov_rate": 0.42718757272515706
+      },
+      "test_cv": {
+        "words": 11582,
+        "oov_tokens": 4274,
+        "oov_rate": 0.36902089449145226
+      },
+      "test_parl": {
+        "words": 34209,
+        "oov_tokens": 14944,
+        "oov_rate": 0.43684410535239265
+      },
+      "test_fleurs": {
+        "words": 14685,
+        "oov_tokens": 8571,
+        "oov_rate": 0.5836567926455567
+      }
+    }
+  },
+  "model_sha256": "6c5143402208e6cdf7d1523fab5541e6c925dccc900bdeef42f48600ea8ca7e3",
+  "graph_sha256": "af51378d3a71cf01f682c3d3594a7e17f13d14ceaa8118d0bf12a811e855a1ff",
+  "cpu_info": "processor\t: 0\nvendor_id\t: AuthenticAMD\ncpu family\t: 23\nmodel\t\t: 49\nmodel name\t: AMD EPYC 7B12\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2249.998\ncache size\t: 512 KB\nphysical id\t: 0\nsiblings\t: 2\ncore id\t\t: 0\ncpu cores\t: 1\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ssbd ibrs ibpb stibp vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 clzero xsaveerptr arat umip rdpid\nbugs\t\t: sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass retbleed smt_rsb srso ibpb_no_ret\nbogomips\t: 4499.99\nTLB size\t: 3072 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 48 bits virtual\npower management:\n\nprocessor\t: 1\nvendor_id\t: AuthenticAMD\ncpu family\t: 23\nmodel\t\t: 49\nmodel name\t: AMD EPYC 7B12\nstepping\t: 0\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 2249.998\ncache size\t: 512 KB\nphysical id\t: 0\nsiblings\t: 2\ncore id\t\t: 0\ncpu cores\t: 1\napicid\t\t: 1\ninitial apicid\t: 1\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ssbd ibrs ibpb stibp vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 clzero xsaveerptr arat umip rdpid\nbugs\t\t: sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass retbleed smt_rsb srso ibpb_no_ret\nbogomips\t: 4499.99\nTLB size\t: 3072 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 48 bits virtual\npower management:\n\n",
+  "role": "Classical baseline, implemented/trained by our group",
+  "timing": "MFCC13+deltas; per-utterance mean CMVN; grapheme monophone GMM-HMM; train-only unigram; 40 iters/1000 Gaussians; beam13/lattice6/acoustic-scale0.083333; CPU1 decode; RTF=decode-only incl CMVN+deltas+lattice+bestpath, excludes precomputed MFCC: not directly comparable with neural RTF; UNK rendered as unk"
+}
