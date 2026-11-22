@@ -229,13 +229,13 @@ def run_split(transcribe_fn: Callable[[List], List[str]], dset, batch_size: int 
     return ids, refs, raw, compute, audio_sec
 
 
-def _done_splits(system: str, scores_dir: str = SCORES_DIR) -> set:
+def _done_splits(system: str, scores_dir: str = SCORES_DIR, pred_dir: str = PRED_DIR) -> set:
     path = f"{scores_dir}/{_slug(system)}.csv"
     if not os.path.exists(path):
         return set()
     with open(path, newline="", encoding="utf-8") as f:
         return {r["test_set"] for r in csv.DictReader(f)
-                if os.path.exists(f"{PRED_DIR}/{_slug(system)}__{r['test_set']}.csv")}
+                if os.path.exists(f"{pred_dir}/{_slug(system)}__{r['test_set']}.csv")}
 
 
 def evaluate_system(system: str, checkpoint: str, transcribe_fn, test_sets: Dict,
@@ -248,7 +248,7 @@ def evaluate_system(system: str, checkpoint: str, transcribe_fn, test_sets: Dict
     """
     if role not in ("baseline", "contribution"):
         raise ValueError("role must be 'baseline' or 'contribution'")
-    done = _done_splits(system, scores_dir)
+    done = _done_splits(system, scores_dir, pred_dir)
     todo = {k: v for k, v in test_sets.items() if k not in done}
     if done:
         print(f"[{system}] already scored, skipped: {sorted(done)} (delete {scores_dir}/{_slug(system)}.csv to redo)")
@@ -309,3 +309,27 @@ def export_zip(systems: Sequence[str], zip_path: str) -> List[str]:
             z.write(f)
     print(f"{zip_path}: {len(files)} files")
     return files
+
+
+def compare_runs(systems: Sequence[str], rerun_scores: str, rerun_pred: str,
+                 scores_dir: str = SCORES_DIR, pred_dir: str = PRED_DIR):
+    """Compare a reproduction run with the committed results (WER/CER and identical outputs)."""
+    import pandas as pd
+
+    rows = []
+    for name in systems:
+        slug = _slug(name)
+        old = pd.read_csv(f"{scores_dir}/{slug}.csv").set_index("test_set")
+        new = pd.read_csv(f"{rerun_scores}/{slug}.csv").set_index("test_set")
+        for s in TEST_SETS:
+            if s not in old.index or s not in new.index:
+                continue
+            po = pd.read_csv(f"{pred_dir}/{slug}__{s}.csv", keep_default_na=False, dtype=str)
+            pn = pd.read_csv(f"{rerun_pred}/{slug}__{s}.csv", keep_default_na=False, dtype=str)
+            if po.id.tolist() != pn.id.tolist():
+                raise RuntimeError(f"{name} {s}: clip order differs between runs")
+            rows.append({"system": name, "test_set": s,
+                         "wer_committed": old.loc[s, "wer"], "wer_rerun": new.loc[s, "wer"],
+                         "cer_committed": old.loc[s, "cer"], "cer_rerun": new.loc[s, "cer"],
+                         "identical_outputs": f"{int((po.hypothesis.values == pn.hypothesis.values).sum())}/{len(po)}"})
+    return pd.DataFrame(rows)
