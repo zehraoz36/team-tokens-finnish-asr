@@ -193,19 +193,19 @@ Bold marks the lowest WER on that test set across all systems.
 
 Root files: `.gitignore` documents ignored local/build artifacts; `LICENSE` covers our code;
 `requirements.txt` and `requirements-analysis.txt` list runtime dependencies;
-`test_paired_significance.py` contains paired-statistics unit tests. The root-level
-`error_summary.csv`, `error_examples.csv`, `error_analysis_metadata.json`,
-`paired_significance.csv`, and `paired_significance_metadata.json` are generated compatibility
-copies of the canonical outputs under `results/`. Both analysis scripts regenerate both locations;
-use the `results/` files in project reports.
+`test_paired_significance.py` contains paired-statistics unit tests. All generated analysis
+outputs (error summaries, paired-significance tables, and their metadata) are stored under
+`results/`, which is the single canonical location used in project reports.
 
 - `data/` — clip lists (CSV), one per split, plus `summary.csv` (`text` = cleaned, `raw_text` = original)
 - `scripts/` — `prepare_data.ipynb` (data), `finnish_asr_whisper_finetune.ipynb` (fine-tuning),
   `asr_eval.py` (shared evaluation), `eval_*.ipynb` (one notebook per evaluated system),
-  `make_results_table.py`, `bootstrap_ci.py`, `data_checks.py`
+  `make_results_table.py`, `bootstrap_ci.py`, `data_checks.py`, `paired_significance.py`,
+  `analyze_saved_errors.py`, `analysis_common.py`
 - `results/` — `scores/` (one file per system), `predictions/` (per-clip predictions),
   `run_metadata/` (per-system protocol and config), `results_table.md`, `bootstrap_ci.md`,
-  `data_checks.md`, `legacy/` (first-run results)
+  `data_checks.md`, `error_analysis.md`, `paired_significance.md`, `model_support_audit.md`,
+  `legacy/` (first-run results)
 - `contributions/` — per-member contribution notes
 
 ## Reproduce
@@ -218,6 +218,6 @@ use the `results/` files in project reports.
    `python scripts/data_checks.py`.
 5. Saved-prediction analysis (no GPU): install `requirements-analysis.txt`, then run
    `python scripts/paired_significance.py` and `python scripts/analyze_saved_errors.py`.
-6. The original GMM notebook preserves the executed troubleshooting session. A separate
-   `scripts/eval_gmm_hmm_clean.ipynb` integrates the installation fixes in execution order;
-   its clean-runtime Colab build has not yet been executed. The original results remain unchanged.
+6. The GMM-HMM notebook (`scripts/eval_gmm_hmm.ipynb`) preserves the executed run, including the
+   installation and troubleshooting steps in execution order. The committed GMM-HMM results come
+   from that notebook.
